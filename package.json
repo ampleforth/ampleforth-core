@@ -1,0 +1,26 @@
+{
+  "name": "@ampleforth/monorepo",
+  "version": "1.0.0",
+  "keywords": [
+    "ethereum",
+    "react",
+    "workspaces",
+    "yarn"
+  ],
+  "private": true,
+  "scripts": {
+    "subgraph:auth": "yarn workspace @ampleforth/subgraph auth",
+    "subgraph:codegen": "yarn workspace @ampleforth/subgraph codegen",
+    "subgraph:build": "yarn workspace @ampleforth/subgraph build",
+    "subgraph:deploy": "yarn workspace @ampleforth/subgraph deploy"
+  },
+  "workspaces": {
+    "nohoist": [
+      "**/@graphprotocol/graph-ts",
+      "**/@graphprotocol/graph-ts/**"
+    ],
+    "packages": [
+      "*"
+    ]
+  }
+}
