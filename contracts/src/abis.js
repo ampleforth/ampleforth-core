@@ -1,9 +1,13 @@
-import erc20Abi from "./abis/erc20.json";
-import ownableAbi from "./abis/ownable.json";
+import { abi as Token } from './abis/UFragments.json'
+import { abi as Policy } from './abis/UFragmentsPolicy.json'
+import { abi as Orchestrator } from './abis/Orchestrator.json'
+import { abi as Oracle } from './abis/MedianOracle.json'
 
 const abis = {
-  erc20: erc20Abi,
-  ownable: ownableAbi,
-};
+  Token,
+  Policy,
+  Orchestrator,
+  Oracle,
+}
 
-export default abis;
+export default abis
