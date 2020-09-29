@@ -1,26 +1,76 @@
 specVersion: 0.0.2
 description: Subgraph that indexes the blockchain data
-repository: https://github.com/sablierhq/sablier-subgraph
+repository: https://github.com/ampleforth/ampleforth-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: CeaErc20
+    name: Policy
     network: mainnet
     source:
-      abi: erc20
-      address: "0xc1C0472c0C80bCcDC7F5D01A376Bd97a734B8815"
+      abi: PolicyABI
+      address: '0x1B228a749077b8e307C5856cE62Ef35d96Dca2ea'
+      startBlock: 7953832
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       abis:
-        - name: erc20
-          file: ../contracts/src/abis/erc20.json
+        - name: PolicyABI
+          file: ../contracts/src/abis/UFragmentsPolicy.json
+        - name: TokenABI
+          file: ../contracts/src/abis/UFragments.json
       entities:
-        - Token
-        - Transfer
+        - Policy
       eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-      file: ./src/mappings/transfers.ts
+        - event: LogRebase(indexed uint256,uint256,uint256,int256,uint256)
+          handler: handleRebase
+      file: ./src/mappings/policy.ts
+      language: wasm/assemblyscript
+  - kind: ethereum/contract
+    name: CPIOracle
+    network: mainnet
+    source:
+      abi: OracleABI
+      address: '0xa759f960dd59a1ad32c995ecabe802a0c35f244f'
+      startBlock: 7953893
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: OracleABI
+          file: ../contracts/src/abis/MedianOracle.json
+      entities:
+        - MedianOracle
+      eventHandlers:
+        - event: ProviderReportPushed(indexed address,uint256,uint256)
+          handler: handleReport
+        - event: ProviderAdded(address)
+          handler: handleAddProvider
+        - event: ProviderRemoved(address)
+          handler: handleRemoveProvider
+      file: ./src/mappings/oracle.ts
+      language: wasm/assemblyscript
+  - kind: ethereum/contract
+    name: MarketOracle
+    network: mainnet
+    source:
+      abi: OracleABI
+      address: '0x99c9775e076fdf99388c029550155032ba2d8914'
+      startBlock: 7953878
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: OracleABI
+          file: ../contracts/src/abis/MedianOracle.json
+      entities:
+        - MedianOracle
+      eventHandlers:
+        - event: ProviderReportPushed(indexed address,uint256,uint256)
+          handler: handleReport
+        - event: ProviderAdded(address)
+          handler: handleAddProvider
+        - event: ProviderRemoved(address)
+          handler: handleRemoveProvider
+      file: ./src/mappings/oracle.ts
       language: wasm/assemblyscript

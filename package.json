@@ -9,10 +9,7 @@
   ],
   "private": true,
   "scripts": {
-    "subgraph:auth": "yarn workspace @ampleforth/subgraph auth",
-    "subgraph:codegen": "yarn workspace @ampleforth/subgraph codegen",
-    "subgraph:build": "yarn workspace @ampleforth/subgraph build",
-    "subgraph:deploy": "yarn workspace @ampleforth/subgraph deploy"
+    "subgraph": "yarn workspace @ampleforth/subgraph"
   },
   "workspaces": {
     "nohoist": [
