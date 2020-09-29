@@ -1,13 +1,59 @@
-type Token @entity {
+type MedianOracle @entity {
   id: ID!
-  decimals: Int
-  name: String
-  symbol: String
+  medianReport: BigDecimal
+  isValid: Boolean
+  providers: [OracleProvider!]! @derivedFrom(field: "oracle")
+  reports: [OracleReport!]! @derivedFrom(field: "oracle")
 }
 
-type Transfer @entity {
+type OracleProvider @entity {
   id: ID!
-  from: String!
-  to: String!
-  value: BigInt!
+  active: Boolean!
+  address: Bytes!
+  oracle: MedianOracle!
+  reports: [OracleReport!]! @derivedFrom(field: "provider")
+}
+
+type OracleReport @entity {
+  id: ID!
+  oracle: MedianOracle!
+  provider: OracleProvider!
+  report: BigDecimal!
+  timestamp: BigInt!
+  blocknumber: BigInt!
+  transactionHash: Bytes!
+}
+
+type Token @entity {
+  id: ID!
+  policyAddress: Bytes!
+  totalSupply: BigDecimal!
+  circulatingSupply: BigDecimal!
+  lockedBalance: BigDecimal!
+  decimals: Int!
+  name: String!
+  symbol: String!
+  nextRebaseTimestamp: BigInt!
+  lastRebase: Rebase
+  baseCpi: BigDecimal!
+  rebaseWindowOffset: BigInt!
+  rebaseWindowLength: BigInt!
+  minRebaseTime: BigInt!
+  deviationTreshold: BigDecimal!
+  rebaseHistory: [Rebase!]! @derivedFrom(field: "token")
+}
+
+type Rebase @entity {
+  id: ID!
+  token: Token!
+  epoch: BigInt!
+  timestamp: BigInt!
+  blocknumber: BigInt!
+  transactionHash: Bytes!
+  newSupply: BigDecimal!
+  previousSupply: BigDecimal!
+  precentageChange: BigDecimal!
+  supplyAdjustment: BigDecimal!
+  targetRate: BigDecimal!
+  marketRate: BigDecimal!
 }
