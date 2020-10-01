@@ -68,6 +68,24 @@ export class MedianOracle extends Entity {
     this.set("isValid", Value.fromBoolean(value));
   }
 
+  get reportExpirationTime(): BigInt {
+    let value = this.get("reportExpirationTime");
+    return value.toBigInt();
+  }
+
+  set reportExpirationTime(value: BigInt) {
+    this.set("reportExpirationTime", Value.fromBigInt(value));
+  }
+
+  get reportDelay(): BigInt {
+    let value = this.get("reportDelay");
+    return value.toBigInt();
+  }
+
+  set reportDelay(value: BigInt) {
+    this.set("reportDelay", Value.fromBigInt(value));
+  }
+
   get providers(): Array<string> {
     let value = this.get("providers");
     return value.toStringArray();
