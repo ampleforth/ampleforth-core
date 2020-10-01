@@ -36,6 +36,8 @@ export function handleReport(event: ProviderReportPushed): void {
   let data = oracleContract.getData()
   oracle.medianReport = formatEther(data.value0)
   oracle.isValid = data.value1
+  oracle.reportDelay = oracleContract.reportDelaySec()
+  oracle.reportExpirationTime = oracleContract.reportExpirationTimeSec()
 
   // save
   report.save()

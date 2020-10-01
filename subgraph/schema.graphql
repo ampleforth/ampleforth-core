@@ -2,6 +2,8 @@ type MedianOracle @entity {
   id: ID!
   medianReport: BigDecimal
   isValid: Boolean
+  reportExpirationTime: BigInt!
+  reportDelay: BigInt!
   providers: [OracleProvider!]! @derivedFrom(field: "oracle")
   reports: [OracleReport!]! @derivedFrom(field: "oracle")
 }
