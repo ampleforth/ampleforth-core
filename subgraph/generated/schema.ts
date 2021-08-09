@@ -42,64 +42,31 @@ export class MedianOracle extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get medianReport(): BigDecimal | null {
-    let value = this.get("medianReport");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBigDecimal();
-    }
+  get reportDelaySec(): BigInt {
+    let value = this.get("reportDelaySec");
+    return value.toBigInt();
   }
 
-  set medianReport(value: BigDecimal | null) {
-    if (value === null) {
-      this.unset("medianReport");
-    } else {
-      this.set("medianReport", Value.fromBigDecimal(value as BigDecimal));
-    }
+  set reportDelaySec(value: BigInt) {
+    this.set("reportDelaySec", Value.fromBigInt(value));
   }
 
-  get isValid(): boolean {
-    let value = this.get("isValid");
-    return value.toBoolean();
+  get reportExpirationTimeSec(): BigInt {
+    let value = this.get("reportExpirationTimeSec");
+    return value.toBigInt();
   }
 
-  set isValid(value: boolean) {
-    this.set("isValid", Value.fromBoolean(value));
+  set reportExpirationTimeSec(value: BigInt) {
+    this.set("reportExpirationTimeSec", Value.fromBigInt(value));
   }
 
-  get reportExpirationTime(): BigInt | null {
-    let value = this.get("reportExpirationTime");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+  get minimumProviders(): BigInt {
+    let value = this.get("minimumProviders");
+    return value.toBigInt();
   }
 
-  set reportExpirationTime(value: BigInt | null) {
-    if (value === null) {
-      this.unset("reportExpirationTime");
-    } else {
-      this.set("reportExpirationTime", Value.fromBigInt(value as BigInt));
-    }
-  }
-
-  get reportDelay(): BigInt | null {
-    let value = this.get("reportDelay");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set reportDelay(value: BigInt | null) {
-    if (value === null) {
-      this.unset("reportDelay");
-    } else {
-      this.set("reportDelay", Value.fromBigInt(value as BigInt));
-    }
+  set minimumProviders(value: BigInt) {
+    this.set("minimumProviders", Value.fromBigInt(value));
   }
 
   get providers(): Array<string> {
@@ -178,6 +145,49 @@ export class OracleProvider extends Entity {
     this.set("oracle", Value.fromString(value));
   }
 
+  get reportCount(): BigInt {
+    let value = this.get("reportCount");
+    return value.toBigInt();
+  }
+
+  set reportCount(value: BigInt) {
+    this.set("reportCount", Value.fromBigInt(value));
+  }
+
+  get activeReport1(): string | null {
+    let value = this.get("activeReport1");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set activeReport1(value: string | null) {
+    if (value === null) {
+      this.unset("activeReport1");
+    } else {
+      this.set("activeReport1", Value.fromString(value as string));
+    }
+  }
+
+  get activeReport2(): string | null {
+    let value = this.get("activeReport2");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set activeReport2(value: string | null) {
+    if (value === null) {
+      this.unset("activeReport2");
+    } else {
+      this.set("activeReport2", Value.fromString(value as string));
+    }
+  }
+
   get reports(): Array<string> {
     let value = this.get("reports");
     return value.toStringArray();
@@ -245,6 +255,15 @@ export class OracleReport extends Entity {
     this.set("report", Value.fromBigDecimal(value));
   }
 
+  get nonce(): BigInt {
+    let value = this.get("nonce");
+    return value.toBigInt();
+  }
+
+  set nonce(value: BigInt) {
+    this.set("nonce", Value.fromBigInt(value));
+  }
+
   get timestamp(): BigInt {
     let value = this.get("timestamp");
     return value.toBigInt();
@@ -254,22 +273,13 @@ export class OracleReport extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get blocknumber(): BigInt {
-    let value = this.get("blocknumber");
-    return value.toBigInt();
+  get purged(): boolean {
+    let value = this.get("purged");
+    return value.toBoolean();
   }
 
-  set blocknumber(value: BigInt) {
-    this.set("blocknumber", Value.fromBigInt(value));
-  }
-
-  get transactionHash(): Bytes {
-    let value = this.get("transactionHash");
-    return value.toBytes();
-  }
-
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
+  set purged(value: boolean) {
+    this.set("purged", Value.fromBoolean(value));
   }
 }
 
@@ -377,7 +387,7 @@ export class Token extends Entity {
 
   get lastRebase(): string | null {
     let value = this.get("lastRebase");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();

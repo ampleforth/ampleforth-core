@@ -1,9 +1,8 @@
 type MedianOracle @entity {
   id: ID!
-  medianReport: BigDecimal
-  isValid: Boolean
-  reportExpirationTime: BigInt
-  reportDelay: BigInt
+  reportDelaySec: BigInt!
+  reportExpirationTimeSec: BigInt!
+  minimumProviders: BigInt!
   providers: [OracleProvider!]! @derivedFrom(field: "oracle")
   reports: [OracleReport!]! @derivedFrom(field: "oracle")
 }
@@ -13,6 +12,9 @@ type OracleProvider @entity {
   active: Boolean!
   address: Bytes!
   oracle: MedianOracle!
+  reportCount: BigInt!
+  activeReport1: OracleReport
+  activeReport2: OracleReport
   reports: [OracleReport!]! @derivedFrom(field: "provider")
 }
 
@@ -21,9 +23,9 @@ type OracleReport @entity {
   oracle: MedianOracle!
   provider: OracleProvider!
   report: BigDecimal!
+  nonce: BigInt!
   timestamp: BigInt!
-  blocknumber: BigInt!
-  transactionHash: Bytes!
+  purged: Boolean!
 }
 
 type Token @entity {

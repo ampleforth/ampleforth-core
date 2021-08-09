@@ -1,38 +1,16 @@
 specVersion: 0.0.2
-description: Subgraph that indexes the blockchain data
+description: Subgraph for the Ampleforth protocol contracts on ethereum
 repository: https://github.com/ampleforth/ampleforth-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: Policy
-    network: mainnet
-    source:
-      abi: PolicyABI
-      address: '0x1B228a749077b8e307C5856cE62Ef35d96Dca2ea'
-      startBlock: 7953832
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      abis:
-        - name: PolicyABI
-          file: ../contracts/src/abis/UFragmentsPolicy.json
-        - name: TokenABI
-          file: ../contracts/src/abis/UFragments.json
-      entities:
-        - Policy
-      eventHandlers:
-        - event: LogRebase(indexed uint256,uint256,uint256,int256,uint256)
-          handler: handleRebase
-      file: ./src/mappings/policy.ts
-      language: wasm/assemblyscript
-  - kind: ethereum/contract
     name: CPIOracle
-    network: mainnet
+    network: kovan
     source:
       abi: OracleABI
-      address: '0xa759f960dd59a1ad32c995ecabe802a0c35f244f'
-      startBlock: 7953893
+      address: '0xCedc17B394051d0E222797588f3e5ECe5023FB4A'
+      startBlock: 11666618
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -41,22 +19,32 @@ dataSources:
           file: ../contracts/src/abis/MedianOracle.json
       entities:
         - MedianOracle
+      callHandlers:
+        - function: setReportDelaySec(uint256)
+          handler: handleSetReportDelaySec
+        - function: setReportExpirationTimeSec(uint256)
+          handler: handleSetReportExpirationTimeSec
+        - function: setMinimumProviders(uint256)
+          handler: handleSetMinimumProviders
+        - function: pushReport(uint256)
+          handler: handlePushReport
+        - function: purgeReports()
+          handler: handlePurgeReports
       eventHandlers:
-        - event: ProviderReportPushed(indexed address,uint256,uint256)
-          handler: handleReport
         - event: ProviderAdded(address)
           handler: handleAddProvider
         - event: ProviderRemoved(address)
           handler: handleRemoveProvider
-      file: ./src/mappings/oracle.ts
+      file: ./src/datasources/oracle.ts
       language: wasm/assemblyscript
+
   - kind: ethereum/contract
     name: MarketOracle
-    network: mainnet
+    network: kovan
     source:
       abi: OracleABI
-      address: '0x99c9775e076fdf99388c029550155032ba2d8914'
-      startBlock: 7953878
+      address: '0xFC344AF21d647f4244B5F098203A178BF26c51Dc'
+      startBlock: 11666602
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -65,12 +53,21 @@ dataSources:
           file: ../contracts/src/abis/MedianOracle.json
       entities:
         - MedianOracle
+      callHandlers:
+        - function: setReportDelaySec(uint256)
+          handler: handleSetReportDelaySec
+        - function: setReportExpirationTimeSec(uint256)
+          handler: handleSetReportExpirationTimeSec
+        - function: setMinimumProviders(uint256)
+          handler: handleSetMinimumProviders
+        - function: pushReport(uint256)
+          handler: handlePushReport
+        - function: purgeReports()
+          handler: handlePurgeReports
       eventHandlers:
-        - event: ProviderReportPushed(indexed address,uint256,uint256)
-          handler: handleReport
         - event: ProviderAdded(address)
           handler: handleAddProvider
         - event: ProviderRemoved(address)
           handler: handleRemoveProvider
-      file: ./src/mappings/oracle.ts
+      file: ./src/datasources/oracle.ts
       language: wasm/assemblyscript
