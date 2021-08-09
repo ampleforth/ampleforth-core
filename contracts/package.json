@@ -1,5 +1,6 @@
 {
   "name": "@ampleforth/contracts",
   "version": "1.0.0",
+  "license": "GPL-3.0-or-later",
   "main": "./src/index.js"
 }
