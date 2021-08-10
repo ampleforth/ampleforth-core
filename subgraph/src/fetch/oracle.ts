@@ -1,14 +1,11 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { constants } from '@amxx/graphprotocol-utils'
 import { OracleABI } from '../../generated/MarketOracle/OracleABI'
-
 import {
   MedianOracle,
   OracleProvider,
   OracleReport,
 } from '../../generated/schema'
-
-export const ORACLE_DECIMALS = 18
 
 export function refreshMedianOracle(oracle: MedianOracle):void {
   let oracleAddress = Address.fromHexString(oracle.id) as Address
@@ -69,5 +66,7 @@ export function fetchOracleReportByNonce(
   nonce: BigInt,
 ): OracleReport {
   let reportId = provider.id.concat("|").concat(nonce.toString())
-  return fetchOracleReport(provider, reportId)
+  let report = fetchOracleReport(provider, reportId)
+  report.nonce = nonce
+  return report
 }

@@ -1,12 +1,12 @@
-import { decimals, constants } from '@amxx/graphprotocol-utils'
+import { constants } from '@amxx/graphprotocol-utils'
 
 import {
-  ProviderReportPushed,
+  ethereum,
+} from "@graphprotocol/graph-ts";
+
+import {
   ProviderAdded,
   ProviderRemoved,
-  SetReportDelaySecCall,
-  SetReportExpirationTimeSecCall,
-  SetMinimumProvidersCall,
   PushReportCall,
   PurgeReportsCall,
 } from '../../generated/MarketOracle/OracleABI'
@@ -17,32 +17,14 @@ import {
   fetchOracleReport,
   fetchOracleReportByNonce,
   refreshMedianOracle,
-  ORACLE_DECIMALS,
 } from '../fetch/oracle'
 
-import { increment } from './utils'
+import { increment, formatEther } from '../utils'
 
-// Triggered when the "setReportDelaySec" in invoked
-// updates the reportDelaySec value in the store
-export function handleSetReportDelaySec(call: SetReportDelaySecCall): void {
-  let oracle = fetchMedianOracle(call.to)
-  refreshMedianOracle(oracle)
-  oracle.save()
-}
-
-// Triggered when the "setReportExpirationTimeSec" in invoked
-// updates the reportExpirationTimeSecvalue in the store
-export function handleSetReportExpirationTimeSec(
-  call: SetReportExpirationTimeSecCall,
-): void {
-  let oracle = fetchMedianOracle(call.to)
-  refreshMedianOracle(oracle)
-  oracle.save()
-}
-
-// Triggered when the "setMinimumProviders" in invoked
-// updates the minimumProviders in the store
-export function handleSetMinimumProviders(call: SetMinimumProvidersCall): void {
+// Triggered when either "setReportDelaySec" or "setReportExpirationTimeSec"
+// or "setMinimumProviders" is invoked
+// refreshes all the hyper parameter values in the store
+export function handleHyperParamUpdate(call: ethereum.Call): void {
   let oracle = fetchMedianOracle(call.to)
   refreshMedianOracle(oracle)
   oracle.save()
@@ -56,7 +38,7 @@ export function handlePushReport(call: PushReportCall): void {
   let currentNonce = provider.reportCount
 
   let report = fetchOracleReportByNonce(provider, currentNonce)
-  report.report = decimals.toDecimals(call.inputs.payload, ORACLE_DECIMALS)
+  report.report = formatEther(call.inputs.payload)
   report.timestamp = call.block.timestamp
   report.nonce = currentNonce
 

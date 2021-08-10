@@ -283,7 +283,7 @@ export class OracleReport extends Entity {
   }
 }
 
-export class Token extends Entity {
+export class Policy extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -291,17 +291,17 @@ export class Token extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Token entity without an ID");
+    assert(id !== null, "Cannot save Policy entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save Token entity with non-string ID. " +
+      "Cannot save Policy entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("Token", id.toString(), this);
+    store.set("Policy", id.toString(), this);
   }
 
-  static load(id: string): Token | null {
-    return store.get("Token", id) as Token | null;
+  static load(id: string): Policy | null {
+    return store.get("Policy", id) as Policy | null;
   }
 
   get id(): string {
@@ -313,76 +313,58 @@ export class Token extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get policyAddress(): Bytes {
-    let value = this.get("policyAddress");
-    return value.toBytes();
-  }
-
-  set policyAddress(value: Bytes) {
-    this.set("policyAddress", Value.fromBytes(value));
-  }
-
-  get totalSupply(): BigDecimal {
-    let value = this.get("totalSupply");
+  get baseCPI(): BigDecimal {
+    let value = this.get("baseCPI");
     return value.toBigDecimal();
   }
 
-  set totalSupply(value: BigDecimal) {
-    this.set("totalSupply", Value.fromBigDecimal(value));
+  set baseCPI(value: BigDecimal) {
+    this.set("baseCPI", Value.fromBigDecimal(value));
   }
 
-  get circulatingSupply(): BigDecimal {
-    let value = this.get("circulatingSupply");
-    return value.toBigDecimal();
-  }
-
-  set circulatingSupply(value: BigDecimal) {
-    this.set("circulatingSupply", Value.fromBigDecimal(value));
-  }
-
-  get lockedBalance(): BigDecimal {
-    let value = this.get("lockedBalance");
-    return value.toBigDecimal();
-  }
-
-  set lockedBalance(value: BigDecimal) {
-    this.set("lockedBalance", Value.fromBigDecimal(value));
-  }
-
-  get decimals(): i32 {
-    let value = this.get("decimals");
-    return value.toI32();
-  }
-
-  set decimals(value: i32) {
-    this.set("decimals", Value.fromI32(value));
-  }
-
-  get name(): string {
-    let value = this.get("name");
-    return value.toString();
-  }
-
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
-  }
-
-  get symbol(): string {
-    let value = this.get("symbol");
-    return value.toString();
-  }
-
-  set symbol(value: string) {
-    this.set("symbol", Value.fromString(value));
-  }
-
-  get nextRebaseTimestamp(): BigInt {
-    let value = this.get("nextRebaseTimestamp");
+  get rebaseLag(): BigInt {
+    let value = this.get("rebaseLag");
     return value.toBigInt();
   }
 
-  set nextRebaseTimestamp(value: BigInt) {
-    this.set("nextRebaseTimestamp", Value.fromBigInt(value));
+  set rebaseLag(value: BigInt) {
+    this.set("rebaseLag", Value.fromBigInt(value));
+  }
+
+  get deviationThreshold(): BigDecimal {
+    let value = this.get("deviationThreshold");
+    return value.toBigDecimal();
+  }
+
+  set deviationThreshold(value: BigDecimal) {
+    this.set("deviationThreshold", Value.fromBigDecimal(value));
+  }
+
+  get minRebaseTimeIntervalSec(): BigInt {
+    let value = this.get("minRebaseTimeIntervalSec");
+    return value.toBigInt();
+  }
+
+  set minRebaseTimeIntervalSec(value: BigInt) {
+    this.set("minRebaseTimeIntervalSec", Value.fromBigInt(value));
+  }
+
+  get rebaseWindowOffsetSec(): BigInt {
+    let value = this.get("rebaseWindowOffsetSec");
+    return value.toBigInt();
+  }
+
+  set rebaseWindowOffsetSec(value: BigInt) {
+    this.set("rebaseWindowOffsetSec", Value.fromBigInt(value));
+  }
+
+  get rebaseWindowLengthSec(): BigInt {
+    let value = this.get("rebaseWindowLengthSec");
+    return value.toBigInt();
+  }
+
+  set rebaseWindowLengthSec(value: BigInt) {
+    this.set("rebaseWindowLengthSec", Value.fromBigInt(value));
   }
 
   get lastRebase(): string | null {
@@ -402,58 +384,13 @@ export class Token extends Entity {
     }
   }
 
-  get baseCpi(): BigDecimal {
-    let value = this.get("baseCpi");
-    return value.toBigDecimal();
-  }
-
-  set baseCpi(value: BigDecimal) {
-    this.set("baseCpi", Value.fromBigDecimal(value));
-  }
-
-  get rebaseWindowOffset(): BigInt {
-    let value = this.get("rebaseWindowOffset");
-    return value.toBigInt();
-  }
-
-  set rebaseWindowOffset(value: BigInt) {
-    this.set("rebaseWindowOffset", Value.fromBigInt(value));
-  }
-
-  get rebaseWindowLength(): BigInt {
-    let value = this.get("rebaseWindowLength");
-    return value.toBigInt();
-  }
-
-  set rebaseWindowLength(value: BigInt) {
-    this.set("rebaseWindowLength", Value.fromBigInt(value));
-  }
-
-  get minRebaseTime(): BigInt {
-    let value = this.get("minRebaseTime");
-    return value.toBigInt();
-  }
-
-  set minRebaseTime(value: BigInt) {
-    this.set("minRebaseTime", Value.fromBigInt(value));
-  }
-
-  get deviationTreshold(): BigDecimal {
-    let value = this.get("deviationTreshold");
-    return value.toBigDecimal();
-  }
-
-  set deviationTreshold(value: BigDecimal) {
-    this.set("deviationTreshold", Value.fromBigDecimal(value));
-  }
-
-  get rebaseHistory(): Array<string> {
-    let value = this.get("rebaseHistory");
+  get rebases(): Array<string> {
+    let value = this.get("rebases");
     return value.toStringArray();
   }
 
-  set rebaseHistory(value: Array<string>) {
-    this.set("rebaseHistory", Value.fromStringArray(value));
+  set rebases(value: Array<string>) {
+    this.set("rebases", Value.fromStringArray(value));
   }
 }
 
@@ -487,13 +424,13 @@ export class Rebase extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get token(): string {
-    let value = this.get("token");
+  get policy(): string {
+    let value = this.get("policy");
     return value.toString();
   }
 
-  set token(value: string) {
-    this.set("token", Value.fromString(value));
+  set policy(value: string) {
+    this.set("policy", Value.fromString(value));
   }
 
   get epoch(): BigInt {
@@ -514,31 +451,13 @@ export class Rebase extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get blocknumber(): BigInt {
-    let value = this.get("blocknumber");
-    return value.toBigInt();
-  }
-
-  set blocknumber(value: BigInt) {
-    this.set("blocknumber", Value.fromBigInt(value));
-  }
-
-  get transactionHash(): Bytes {
-    let value = this.get("transactionHash");
-    return value.toBytes();
-  }
-
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
-  }
-
-  get newSupply(): BigDecimal {
-    let value = this.get("newSupply");
+  get supply(): BigDecimal {
+    let value = this.get("supply");
     return value.toBigDecimal();
   }
 
-  set newSupply(value: BigDecimal) {
-    this.set("newSupply", Value.fromBigDecimal(value));
+  set supply(value: BigDecimal) {
+    this.set("supply", Value.fromBigDecimal(value));
   }
 
   get previousSupply(): BigDecimal {
@@ -584,5 +503,14 @@ export class Rebase extends Entity {
 
   set marketRate(value: BigDecimal) {
     this.set("marketRate", Value.fromBigDecimal(value));
+  }
+
+  get cpi(): BigDecimal {
+    let value = this.get("cpi");
+    return value.toBigDecimal();
+  }
+
+  set cpi(value: BigDecimal) {
+    this.set("cpi", Value.fromBigDecimal(value));
   }
 }

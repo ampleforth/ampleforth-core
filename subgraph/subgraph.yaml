@@ -21,11 +21,11 @@ dataSources:
         - MedianOracle
       callHandlers:
         - function: setReportDelaySec(uint256)
-          handler: handleSetReportDelaySec
+          handler: handleHyperParamUpdate
         - function: setReportExpirationTimeSec(uint256)
-          handler: handleSetReportExpirationTimeSec
+          handler: handleHyperParamUpdate
         - function: setMinimumProviders(uint256)
-          handler: handleSetMinimumProviders
+          handler: handleHyperParamUpdate
         - function: pushReport(uint256)
           handler: handlePushReport
         - function: purgeReports()
@@ -55,11 +55,11 @@ dataSources:
         - MedianOracle
       callHandlers:
         - function: setReportDelaySec(uint256)
-          handler: handleSetReportDelaySec
+          handler: handleHyperParamUpdate
         - function: setReportExpirationTimeSec(uint256)
-          handler: handleSetReportExpirationTimeSec
+          handler: handleHyperParamUpdate
         - function: setMinimumProviders(uint256)
-          handler: handleSetMinimumProviders
+          handler: handleHyperParamUpdate
         - function: pushReport(uint256)
           handler: handlePushReport
         - function: purgeReports()
@@ -70,4 +70,32 @@ dataSources:
         - event: ProviderRemoved(address)
           handler: handleRemoveProvider
       file: ./src/datasources/oracle.ts
+      language: wasm/assemblyscript
+
+  - kind: ethereum/contract
+    name: MonetaryPolicy
+    network: kovan
+    source:
+      abi: PolicyABI
+      address: '0xBB4617d26E704Ac0568E1cbf5232990a8b7846A4'
+      startBlock: 11666553
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: PolicyABI
+          file: ../contracts/src/abis/UFragmentsPolicy.json
+      entities:
+        - Policy
+      callHandlers:
+        - function: setDeviationThreshold(uint256)
+          handler: handleHyperParamUpdate
+        - function: setRebaseLag(uint256)
+          handler: handleHyperParamUpdate
+        - function: setRebaseTimingParameters(uint256,uint256,uint256)
+          handler: handleHyperParamUpdate
+      eventHandlers:
+        - event: LogRebase(indexed uint256,uint256,uint256,int256,uint256)
+          handler: handleRebase
+      file: ./src/datasources/policy.ts
       language: wasm/assemblyscript

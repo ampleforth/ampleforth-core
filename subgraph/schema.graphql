@@ -28,36 +28,28 @@ type OracleReport @entity {
   purged: Boolean!
 }
 
-type Token @entity {
+type Policy @entity {
   id: ID!
-  policyAddress: Bytes!
-  totalSupply: BigDecimal!
-  circulatingSupply: BigDecimal!
-  lockedBalance: BigDecimal!
-  decimals: Int!
-  name: String!
-  symbol: String!
-  nextRebaseTimestamp: BigInt!
+  baseCPI: BigDecimal!
+  rebaseLag: BigInt!
+  deviationThreshold: BigDecimal!
+  minRebaseTimeIntervalSec: BigInt!
+  rebaseWindowOffsetSec: BigInt!
+  rebaseWindowLengthSec: BigInt!
   lastRebase: Rebase
-  baseCpi: BigDecimal!
-  rebaseWindowOffset: BigInt!
-  rebaseWindowLength: BigInt!
-  minRebaseTime: BigInt!
-  deviationTreshold: BigDecimal!
-  rebaseHistory: [Rebase!]! @derivedFrom(field: "token")
+  rebases: [Rebase!]! @derivedFrom(field: "policy")
 }
 
 type Rebase @entity {
   id: ID!
-  token: Token!
+  policy: Policy!
   epoch: BigInt!
   timestamp: BigInt!
-  blocknumber: BigInt!
-  transactionHash: Bytes!
-  newSupply: BigDecimal!
+  supply: BigDecimal!
   previousSupply: BigDecimal!
   precentageChange: BigDecimal!
   supplyAdjustment: BigDecimal!
   targetRate: BigDecimal!
   marketRate: BigDecimal!
+  cpi: BigDecimal!
 }

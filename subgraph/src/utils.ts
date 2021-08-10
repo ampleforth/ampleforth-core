@@ -1,9 +1,19 @@
 import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 
-export const formatAmpl = (wei: BigInt): BigDecimal => {
+export let BIGDECIMAL_ONE = BigDecimal.fromString("1")
+
+export const formatAMPL = (wei: BigInt): BigDecimal => {
   return wei.toBigDecimal().div(
     BigInt.fromI32(10)
       .pow(9)
+      .toBigDecimal(),
+  )
+}
+
+export const formatEther = (wei: BigInt): BigDecimal => {
+  return wei.toBigDecimal().div(
+    BigInt.fromI32(10)
+      .pow(18)
       .toBigDecimal(),
   )
 }
