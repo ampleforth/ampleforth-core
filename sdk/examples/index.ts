@@ -7,7 +7,7 @@ import {
     getAMPLToken,
     getTokenBalance,
     // getTokenApproval,
-} from '../index'
+} from '../src'
 
 async function run() {
     const marketOracle = await getAmpleforthMarketOracle()

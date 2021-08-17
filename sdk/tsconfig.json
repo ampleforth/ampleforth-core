@@ -2,7 +2,7 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "lib": ["es5", "es6"],
+        "lib": ["es5", "es6", "dom"],
         "module": "commonjs",
         "moduleResolution": "node",
         "noImplicitAny": true,
@@ -10,7 +10,9 @@
         "resolveJsonModule": true,
         "sourceMap": true,
         "strict": true,
-        "target": "es6"
+        "target": "es6",
+        "declaration": true
     },
-    "include": ["src/**/**/*", "test/**/*"]
+    "include": ["src/**/**/*", "examples/*", "test/**/*"],
+    "exclude": ["dist", "node_modules"]
 }

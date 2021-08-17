@@ -1,5 +1,5 @@
 import { Client } from '@urql/core'
-import fetch from 'node-fetch'
+import fetch from 'isomorphic-unfetch'
 
 export const GRAPH_ENDPOINT =
     'https://api.thegraph.com/subgraphs/name/aalavandhan/ampleforth'
