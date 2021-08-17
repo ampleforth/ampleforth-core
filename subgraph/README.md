@@ -2,38 +2,33 @@
 
 The Graph is a tool for for indexing events emitted on the Ethereum blockchain. It provides you with an easy-to-use GraphQL API.
 
-## Available Scripts
+## Getting started
 
-In the project directory, you can run:
+Run a local instance of the graph node:
 
-### Subgraph
+```
+git clone https://github.com/graphprotocol/graph-node
+cd graph-node/docker
+# update docker-compose.yaml with alchemy rpc endpoint
+docker-compose up
+```
 
-#### `yarn codegen`
+To build and deploy the subgraph on your local graph node:
 
-Generates AssemblyScript types for smart contract ABIs and the subgraph schema.
+```
+./scripts/prepare.sh mainnet # or kovan
+yarn remove-local # skip if deploying for the first time
+yarn create-local
+yarn deploy-local
+```
 
-#### `yarn build`
+To deploy the subgraph to prod:
 
-Compiles the subgraph to WebAssembly.
+```
+./scripts/prepare.sh mainnet
 
-#### `yarn deploy`
+# create an account with thegraph.com and get access key
+yarn graph auth --product hosted-service <ACCESS_TOKEN>
 
-Deploys the subgraph to the official Graph Node.<br/>
-
-You may also want to [read more about the hosted service](https://thegraph.com/docs/quick-start#hosted-service).
-
-## Learn More
-
-To learn The Graph, check out the [The Graph documentation](https://thegraph.com/docs).
-
----
-
-1. Generate types
-2. Build distributable files
-3. Deploy to the remote API
-
-## Learn More
-
-You can learn more in the [The Graph documentation](https://thegraph.com/docs).<br/>
-
-Also consider joining [The Graph Discord server](https://discord.gg/vtvv7FP), where you can seek out help.
+yarn deploy
+```

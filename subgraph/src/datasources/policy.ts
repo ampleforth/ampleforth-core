@@ -1,21 +1,8 @@
 import { constants } from '@amxx/graphprotocol-utils'
-
-import {
-  ethereum,
-} from "@graphprotocol/graph-ts";
-
-import {
-  LogRebase,
-} from '../../generated/Policy/PolicyABI'
-
-import {
-  fetchPolicy,
-  refreshPolicy,
-  fetchRebaseByEpoch,
-} from '../fetch/policy'
-
-import { formatAMPL, formatEther, BIGDECIMAL_ONE } from '../utils'
-
+import { ethereum } from '@graphprotocol/graph-ts'
+import { LogRebase } from '../../generated/Policy/PolicyABI'
+import { fetchPolicy, refreshPolicy, fetchRebaseByEpoch } from '../fetch/policy'
+import { formatAMPL, formatEther } from '../utils'
 
 // Triggered when either "setDeviationThreshold" or "setRebaseLag"
 // or "setRebaseTimingParameters" is invoked
@@ -43,7 +30,7 @@ export function handleRebase(event: LogRebase): void {
   rebase.supply = rebase.previousSupply.plus(rebase.supplyAdjustment)
   rebase.precentageChange = rebase.supply
     .div(rebase.previousSupply)
-    .minus(BIGDECIMAL_ONE)
+    .minus(constants.BIGDECIMAL_ONE)
   rebase.marketRate = formatEther(event.params.exchangeRate)
   rebase.cpi = formatEther(event.params.cpi)
   rebase.targetRate = rebase.cpi.div(policy.baseCPI)

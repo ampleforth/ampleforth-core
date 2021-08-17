@@ -7,7 +7,7 @@ import {
   OracleReport,
 } from '../../generated/schema'
 
-export function refreshMedianOracle(oracle: MedianOracle):void {
+export function refreshMedianOracle(oracle: MedianOracle): void {
   let oracleAddress = Address.fromHexString(oracle.id) as Address
   let oracleContract = OracleABI.bind(oracleAddress)
 
@@ -21,6 +21,7 @@ export function fetchMedianOracle(id: Address): MedianOracle {
   let oracle = MedianOracle.load(oracleId)
   if (oracle == null) {
     oracle = new MedianOracle(oracleId)
+    oracle.address = id
     refreshMedianOracle(oracle as MedianOracle)
   }
   return oracle as MedianOracle
@@ -30,16 +31,16 @@ export function fetchOracleProvider(
   oracle: MedianOracle,
   id: Address,
 ): OracleProvider {
-  let providerId = oracle.id.concat("|").concat(id.toHexString())
+  let providerId = oracle.id.concat('|').concat(id.toHexString())
   let provider = OracleProvider.load(providerId)
   if (provider == null) {
     provider = new OracleProvider(providerId)
-    provider.active = false
     provider.address = id
+    provider.purged = false
     provider.oracle = oracle.id
     provider.reportCount = constants.BIGINT_ZERO
-    provider.activeReport1 = null
-    provider.activeReport2 = null
+    provider.report1 = null
+    provider.report2 = null
   }
   return provider as OracleProvider
 }
@@ -65,7 +66,7 @@ export function fetchOracleReportByNonce(
   provider: OracleProvider,
   nonce: BigInt,
 ): OracleReport {
-  let reportId = provider.id.concat("|").concat(nonce.toString())
+  let reportId = provider.id.concat('|').concat(nonce.toString())
   let report = fetchOracleReport(provider, reportId)
   report.nonce = nonce
   return report

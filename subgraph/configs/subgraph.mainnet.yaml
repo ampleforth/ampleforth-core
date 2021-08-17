@@ -1,0 +1,133 @@
+specVersion: 0.0.2
+description: Subgraph for the Ampleforth protocol contracts on ethereum
+repository: https://github.com/ampleforth/ampleforth-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: CPIOracle
+    network: mainnet
+    source:
+      abi: OracleABI
+      address: '0xa759F960dD59A1aD32c995ecabE802a0C35F244F'
+      startBlock: 7953893
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: OracleABI
+          file: ../sdk/abis/MedianOracle.json
+      entities:
+        - MedianOracle
+      callHandlers:
+        - function: setReportDelaySec(uint256)
+          handler: handleHyperParamUpdate
+        - function: setReportExpirationTimeSec(uint256)
+          handler: handleHyperParamUpdate
+        - function: setMinimumProviders(uint256)
+          handler: handleHyperParamUpdate
+        - function: pushReport(uint256)
+          handler: handlePushReport
+        - function: purgeReports()
+          handler: handlePurgeReports
+      eventHandlers:
+        - event: ProviderAdded(address)
+          handler: handleAddProvider
+        - event: ProviderRemoved(address)
+          handler: handleRemoveProvider
+      file: ./src/datasources/oracle.ts
+      language: wasm/assemblyscript
+
+  - kind: ethereum/contract
+    name: MarketOracle
+    network: mainnet
+    source:
+      abi: OracleABI
+      address: '0x99C9775E076FDF99388C029550155032Ba2d8914'
+      startBlock: 7953878
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: OracleABI
+          file: ../sdk/abis/MedianOracle.json
+      entities:
+        - MedianOracle
+      callHandlers:
+        - function: setReportDelaySec(uint256)
+          handler: handleHyperParamUpdate
+        - function: setReportExpirationTimeSec(uint256)
+          handler: handleHyperParamUpdate
+        - function: setMinimumProviders(uint256)
+          handler: handleHyperParamUpdate
+        - function: pushReport(uint256)
+          handler: handlePushReport
+        - function: purgeReports()
+          handler: handlePurgeReports
+      eventHandlers:
+        - event: ProviderAdded(address)
+          handler: handleAddProvider
+        - event: ProviderRemoved(address)
+          handler: handleRemoveProvider
+      file: ./src/datasources/oracle.ts
+      language: wasm/assemblyscript
+
+  - kind: ethereum/contract
+    name: Policy
+    network: mainnet
+    source:
+      abi: PolicyABI
+      address: '0x1B228a749077b8e307C5856cE62Ef35d96Dca2ea'
+      startBlock: 7953832
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: PolicyABI
+          file: ../sdk/abis/UFragmentsPolicy.json
+      entities:
+        - Policy
+      callHandlers:
+        - function: setDeviationThreshold(uint256)
+          handler: handleHyperParamUpdate
+        - function: setRebaseLag(uint256)
+          handler: handleHyperParamUpdate
+        - function: setRebaseTimingParameters(uint256,uint256,uint256)
+          handler: handleHyperParamUpdate
+      eventHandlers:
+        - event: LogRebase(indexed uint256,uint256,uint256,int256,uint256)
+          handler: handleRebase
+      file: ./src/datasources/policy.ts
+      language: wasm/assemblyscript
+
+  - kind: ethereum/contract
+    name: Token
+    network: mainnet
+    source:
+      abi: TokenABI
+      address: '0xD46bA6D942050d489DBd938a2C909A5d5039A161'
+      startBlock: 7953823
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: TokenABI
+          file: ../sdk/abis/UFragments.json
+      entities:
+        - Token
+      callHandlers:
+        - function: setMonetaryPolicy(address)
+          handler: handleHyperParamUpdate
+        - function: transferFrom(address,address,uint256)
+          handler: handleApprovalUpdateOnTransferFrom
+        - function: transferAllFrom(address,address)
+          handler: handleApprovalUpdateOnTransferAllFrom
+      eventHandlers:
+        - event: LogRebase(indexed uint256,uint256)
+          handler: handleRebase
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/datasources/token.ts
+      language: wasm/assemblyscript

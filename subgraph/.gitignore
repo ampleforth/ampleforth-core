@@ -1,1 +1,5 @@
+# generated entities
 generated/
+
+# subgraph file
+subgraph.yaml

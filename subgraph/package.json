@@ -5,14 +5,14 @@
   "scripts": {
     "codegen": "graph codegen --output-dir ./generated",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ ampleforth/subgraph",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ aalavandhan/ampleforth",
     "create-local": "graph create --node http://localhost:8020/ ampleforth/subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ ampleforth/subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ampleforth/subgraph",
     "format": "yarn prettier --config .prettierrc --write '**/*.ts'"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-cli": "^0.21.1",
     "@graphprotocol/graph-ts": "^0.20.0",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
@@ -22,6 +22,6 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@amxx/graphprotocol-utils": "^1.0.0-alpha.11"
+    "@amxx/graphprotocol-utils": "https://github.com/Amxx/graphprotocol-utils.git#master"
   }
 }

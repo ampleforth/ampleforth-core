@@ -1,16 +1,11 @@
 import { constants } from '@amxx/graphprotocol-utils'
-
-import {
-  ethereum,
-} from "@graphprotocol/graph-ts";
-
+import { ethereum } from '@graphprotocol/graph-ts'
 import {
   ProviderAdded,
   ProviderRemoved,
   PushReportCall,
   PurgeReportsCall,
 } from '../../generated/MarketOracle/OracleABI'
-
 import {
   fetchMedianOracle,
   fetchOracleProvider,
@@ -42,12 +37,12 @@ export function handlePushReport(call: PushReportCall): void {
   report.timestamp = call.block.timestamp
   report.nonce = currentNonce
 
-  let report1 = fetchOracleReport(provider, provider.activeReport1)
-  let report2 = fetchOracleReport(provider, provider.activeReport2)
+  let report1 = fetchOracleReport(provider, provider.report1)
+  let report2 = fetchOracleReport(provider, provider.report2)
   if (report1.timestamp.le(report2.timestamp)) {
-    provider.activeReport1 = report.id
+    provider.report1 = report.id
   } else {
-    provider.activeReport2 = report.id
+    provider.report2 = report.id
   }
 
   provider.reportCount = increment(currentNonce)
@@ -62,8 +57,8 @@ export function handlePurgeReports(call: PurgeReportsCall): void {
   let oracle = fetchMedianOracle(call.to)
   let provider = fetchOracleProvider(oracle, call.from)
 
-  let report1 = fetchOracleReport(provider, provider.activeReport1)
-  let report2 = fetchOracleReport(provider, provider.activeReport2)
+  let report1 = fetchOracleReport(provider, provider.report1)
+  let report2 = fetchOracleReport(provider, provider.report2)
 
   report1.timestamp = constants.BIGINT_ONE
   report1.purged = true
@@ -80,7 +75,6 @@ export function handlePurgeReports(call: PurgeReportsCall): void {
 export function handleAddProvider(event: ProviderAdded): void {
   let oracle = fetchMedianOracle(event.address)
   let provider = fetchOracleProvider(oracle, event.params.provider)
-  provider.active = true
   provider.save()
 }
 
@@ -89,6 +83,6 @@ export function handleAddProvider(event: ProviderAdded): void {
 export function handleRemoveProvider(event: ProviderRemoved): void {
   let oracle = fetchMedianOracle(event.address)
   let provider = fetchOracleProvider(oracle, event.params.provider)
-  provider.active = false
+  provider.purged = true
   provider.save()
 }
