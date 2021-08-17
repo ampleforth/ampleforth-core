@@ -10,6 +10,7 @@
   ],
   "private": true,
   "scripts": {
+    "sdk": "yarn workspace @ampleforth/sdk",
     "subgraph": "yarn workspace @ampleforth/subgraph"
   },
   "workspaces": {
