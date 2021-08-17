@@ -1,0 +1,42 @@
+{
+    "name": "@ampleforth/sdk",
+    "version": "1.0.0",
+    "description": "Typescript SDK for the Ampleforth Protocol",
+    "license": "GPL-3.0-or-later",
+    "main": "src/index.ts",
+    "repository": "git@github.com:ampleforth/ampleforth-sdk.git",
+    "scripts": {
+        "clean": "rimraf coverage build tmp",
+        "prebuild": "yarn lint",
+        "build": "tsc -p tsconfig.json",
+        "build:watch": "tsc -w -p tsconfig.json",
+        "lint": "yarn eslint && yarn prettier:list-different",
+        "lint:fix": "yarn eslint:fix && yarn prettier",
+        "eslint": "eslint . --ext .ts,.tsx",
+        "eslint:fix": "eslint . --fix --ext .ts,.tsx",
+        "prettier": "prettier --config .prettierrc --write \"**/*.{js,json,md,sol,ts}\"",
+        "prettier:list-different": "prettier --config .prettierrc --list-different \"**/*.{js,json,md,sol,ts}\"",
+        "test": "jest --coverage",
+        "test:watch": "jest --watch"
+    },
+    "dependencies": {
+        "@types/bignumber.js": "^5.0.0",
+        "@types/node-fetch": "^2.5.12",
+        "@typescript-eslint/eslint-plugin": "^4.29.0",
+        "@typescript-eslint/parser": "^4.29.0",
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-jest": "^24.4.0",
+        "ethers": "^5.4.3",
+        "jest": "^27.0.6",
+        "prettier": "^2.3.2",
+        "tiny-invariant": "^1.1.0",
+        "typescript": "^4.3.5",
+        "urql": "^2.0.4"
+    },
+    "devDependencies": {
+        "@types/jest": "^26.0.24",
+        "ts-jest": "^27.0.4",
+        "ts-node": "^10.1.0"
+    }
+}
