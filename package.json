@@ -1,5 +1,5 @@
 {
-  "name": "@ampleforth/monorepo",
+  "name": "@ampleforth/core",
   "version": "1.0.0",
   "license": "GPL-3.0-or-later",
   "keywords": [
@@ -14,10 +14,6 @@
     "subgraph": "yarn workspace @ampleforth/subgraph"
   },
   "workspaces": {
-    "nohoist": [
-      "**/@graphprotocol/graph-ts",
-      "**/@graphprotocol/graph-ts/**"
-    ],
     "packages": [
       "*"
     ]
