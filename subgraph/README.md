@@ -2,6 +2,11 @@
 
 The Graph is a tool for for indexing events emitted on the Ethereum blockchain. It provides you with an easy-to-use GraphQL API.
 
+```
+Public graphql endpoint:
+https://api.thegraph.com/subgraphs/name/aalavandhan/ampleforth
+```
+
 ## Getting started
 
 Run a local instance of the graph node:
