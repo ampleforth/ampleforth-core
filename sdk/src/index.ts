@@ -1,5 +1,5 @@
-import * as abis from '../abis'
-import * as deployments from '../deployments'
+import * as abis from './abis'
+import * as deployments from './deployments'
 import * as queries from './queries'
 
 import {
