@@ -1,6 +1,6 @@
 {
     "name": "@ampleforth1984/sdk",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Typescript SDK for the Ampleforth Protocol",
     "license": "GPL-3.0-or-later",
     "main": "dist/src/index.js",
