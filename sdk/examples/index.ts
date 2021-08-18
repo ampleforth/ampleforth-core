@@ -36,7 +36,7 @@ async function run() {
     console.log('AMPL supply', ampl.totalSupply.toString())
     const b = await getTokenBalance(
         ampl,
-        '0x85a07da377a4de02409fa2a05616743f1392bb90',
+        '0x1e6bb68acec8fefbd87d192be09bb274170a0548',
     )
     console.log('User Balance', b.balance.toString())
 }
