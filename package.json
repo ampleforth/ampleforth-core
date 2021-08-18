@@ -1,5 +1,5 @@
 {
-  "name": "@ampleforth1984/core",
+  "name": "@ampleforthorg/core",
   "version": "1.0.0",
   "license": "GPL-3.0-or-later",
   "keywords": [
@@ -9,9 +9,10 @@
     "yarn"
   ],
   "scripts": {
-    "sdk": "yarn workspace @ampleforth1984/sdk",
-    "subgraph": "yarn workspace @ampleforth1984/subgraph"
+    "sdk": "yarn workspace @ampleforthorg/sdk",
+    "subgraph": "yarn workspace @ampleforthorg/subgraph"
   },
+  "private": true,
   "workspaces": {
     "packages": [
       "*"

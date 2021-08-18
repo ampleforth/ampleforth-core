@@ -1,12 +1,13 @@
 {
-    "name": "@ampleforth1984/sdk",
-    "version": "1.0.1",
+    "name": "@ampleforthorg/sdk",
+    "version": "1.0.0",
     "description": "Typescript SDK for the Ampleforth Protocol",
     "license": "GPL-3.0-or-later",
     "main": "dist/src/index.js",
     "types": "dist/src/index.d.ts",
     "files": [
-        "/dist"
+        "/dist",
+        "/src"
     ],
     "scripts": {
         "clean": "rimraf coverage build tmp",
