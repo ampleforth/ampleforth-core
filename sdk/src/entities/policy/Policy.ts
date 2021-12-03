@@ -88,7 +88,7 @@ export default class Policy {
 
     computeSupplyDelta(marketRate: string, cpi: string): BigNumber {
         const targetRate = new BigNumber(cpi).div(this.baseCPI)
-        const deviation = targetRate.minus(marketRate)
+        const deviation = new BigNumber(marketRate).minus(targetRate)
 
         if (deviation.abs().lte(this.deviationThreshold)) {
             return new BigNumber('0')

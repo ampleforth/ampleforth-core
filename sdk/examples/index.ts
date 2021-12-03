@@ -14,25 +14,36 @@ async function run() {
     const marketOracle = await getAmpleforthMarketOracle()
     console.log('Market oracle', marketOracle.getData().toString())
     console.log('Providers ', marketOracle.providers.length)
-    console.log('Median report', marketOracle.medianReportAt(now))
 
     const cpiOracle = await getAmpleforthCPIOracle()
     console.log('CPI oracle', cpiOracle.getData().toString())
     console.log('Providers ', cpiOracle.providers.length)
-    console.log('Median report', cpiOracle.medianReportAt(now))
 
     const policy = await getAmpleforthPolicy()
     console.log('Epoch', policy.epoch.toString())
     console.log('Supply', policy.supply.toString())
 
     const nextRebaseTimestampSec = policy.nextRebaseWindow()[0].toNumber()
+    const rate = marketOracle.medianReportAt(nextRebaseTimestampSec)
+    if (rate) {
+        console.log('Median rate report at rebase', rate.toString())
+    }
+    const cpi = cpiOracle.medianReportAt(nextRebaseTimestampSec)
+    if (cpi) {
+        console.log('Median cpi report at rebase', cpi.toString())
+    }
+    if (cpi && rate) {
+        console.log(
+            'Next rebase perc',
+            policy.nextRebasePerc(rate.toString(), cpi.toString()),
+        )
+    }
+
     console.log(
-        'Median rate report at rebase',
-        marketOracle.medianReportAt(nextRebaseTimestampSec),
-    )
-    console.log(
-        'Median cpi report at rebase',
-        cpiOracle.medianReportAt(nextRebaseTimestampSec),
+        'Rebase perc',
+        policy
+            .nextRebasePerc('1.2507983570213292', '116.78800000000001')
+            .toString(),
     )
 
     const ampl = await getAMPLToken()
