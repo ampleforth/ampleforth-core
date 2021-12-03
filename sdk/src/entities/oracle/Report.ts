@@ -70,11 +70,12 @@ export default class Report {
     }
 
     static median(reports: Report[]): BigNumber | null {
-        const l = reports.length
+        const validReports = reports.filter((r) => r !== null)
+        const l = validReports.length
         if (l == 0) {
             return null
         }
-        const reports_ = reports.sort(Report.cmpReport)
+        const reports_ = validReports.sort(Report.cmpReport)
         if (l % 2 == 1) {
             return reports_[l / 2 + 1].report
         }

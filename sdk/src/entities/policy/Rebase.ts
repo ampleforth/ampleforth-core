@@ -28,6 +28,14 @@ export default class Rebase {
         return new BigNumber(this.data.supply)
     }
 
+    get previousSupply(): BigNumber {
+        return new BigNumber(this.data.previousSupply)
+    }
+
+    get supplyAdjustment(): BigNumber {
+        return new BigNumber(this.data.supplyAdjustment)
+    }
+
     get rebasePerc(): BigNumber {
         return new BigNumber(this.data.precentageChange)
     }

@@ -23,6 +23,7 @@ export const GET_ORACLE_DATA = `
       minimumProviders
       providers (where: {purged:false}) {
         id
+        address
         purged
         reportCount
         report1 ${REPORT_FRAGMENT}

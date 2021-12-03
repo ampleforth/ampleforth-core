@@ -31,9 +31,8 @@ export default class Provider {
         return this.data.id
     }
 
-    // TODO: change this to ".address"
     get address(): string {
-        return this.data.id.split('|')[1]
+        return this.data.address
     }
 
     get active(): boolean {

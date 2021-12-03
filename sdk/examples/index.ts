@@ -6,7 +6,7 @@ import {
     getRebaseReports,
     getAMPLToken,
     getTokenBalance,
-    // getTokenApproval,
+    getTokenApproval,
 } from '../src'
 
 async function run() {
@@ -27,7 +27,6 @@ async function run() {
     const policy = await getAmpleforthPolicy()
     console.log('Epoch', policy.epoch.toString())
     console.log('Supply', policy.supply.toString())
-    console.log('Rebase Perc', policy.rebasePerc.toString())
 
     const rebases = await getRebaseReports(policy)
     console.log('Rebases', rebases.length)
@@ -36,9 +35,17 @@ async function run() {
     console.log('AMPL supply', ampl.totalSupply.toString())
     const b = await getTokenBalance(
         ampl,
-        '0x1e6bb68acec8fefbd87d192be09bb274170a0548',
+        '0xd99528ce2a83fbad03c1b50bb39e5653b91072b3',
     )
     console.log('User Balance', b.balance.toString())
+
+    const a = await getTokenApproval(
+        ampl,
+        '0xd99528ce2a83fbad03c1b50bb39e5653b91072b3',
+        '0x881d40237659c251811cec9c364ef91dc08d300c',
+    )
+    console.log(a)
+    console.log('User Approval', a.value.toString())
 }
 
 run()

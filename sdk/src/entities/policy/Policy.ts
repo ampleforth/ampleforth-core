@@ -37,10 +37,6 @@ export default class Policy {
         return this.lastRebase.supply
     }
 
-    get rebasePerc(): BigNumber {
-        return this.lastRebase.rebasePerc
-    }
-
     get baseCPI(): BigNumber {
         return new BigNumber(this.data.baseCPI)
     }
