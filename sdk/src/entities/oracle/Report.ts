@@ -74,10 +74,12 @@ export default class Report {
         const l = validReports.length
         if (l == 0) {
             return null
+        } else if (l == 1) {
+            return validReports[0].report
         }
         const reports_ = validReports.sort(Report.cmpReport)
         if (l % 2 == 1) {
-            return reports_[l / 2 + 1].report
+            return reports_[Math.floor(l / 2 + 1)].report
         }
         return reports_[l / 2 - 1].report.plus(reports_[l / 2].report).div(2)
     }
