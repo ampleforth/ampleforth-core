@@ -21,7 +21,7 @@ export default class Rebase {
     }
 
     get timestamp(): BigNumber {
-        return new BigNumber(this.data.epoch)
+        return new BigNumber(this.data.timestamp)
     }
 
     get supply(): BigNumber {

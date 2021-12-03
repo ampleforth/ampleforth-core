@@ -21,7 +21,7 @@ export const GET_ORACLE_DATA = `
       reportDelaySec
       reportExpirationTimeSec
       minimumProviders
-      providers (where: {purged:false}) {
+      providers {
         id
         address
         purged

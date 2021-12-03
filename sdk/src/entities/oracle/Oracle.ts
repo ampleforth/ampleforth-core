@@ -37,7 +37,11 @@ export default class Oracle {
     }
 
     get providers(): Provider[] {
-        return this._providers.filter((p) => p.active)
+        return this._providers
+    }
+
+    get activeProviders(): Provider[] {
+        return this.providers.filter((p) => p.active)
     }
 
     getProvider(providerID: string): Provider | null {
