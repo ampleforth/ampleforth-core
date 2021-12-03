@@ -16,7 +16,7 @@ dataSources:
       apiVersion: 0.0.4
       abis:
         - name: OracleABI
-          file: ../sdk/abis/MedianOracle.json
+          file: ../sdk/src/abis/MedianOracle.json
       entities:
         - MedianOracle
       callHandlers:
@@ -50,7 +50,7 @@ dataSources:
       apiVersion: 0.0.4
       abis:
         - name: OracleABI
-          file: ../sdk/abis/MedianOracle.json
+          file: ../sdk/src/abis/MedianOracle.json
       entities:
         - MedianOracle
       callHandlers:
@@ -84,7 +84,7 @@ dataSources:
       apiVersion: 0.0.4
       abis:
         - name: PolicyABI
-          file: ../sdk/abis/UFragmentsPolicy.json
+          file: ../sdk/src/abis/UFragmentsPolicy.json
       entities:
         - Policy
       callHandlers:
@@ -112,7 +112,7 @@ dataSources:
       apiVersion: 0.0.4
       abis:
         - name: TokenABI
-          file: ../sdk/abis/UFragments.json
+          file: ../sdk/src/abis/UFragments.json
       entities:
         - Token
       callHandlers:
