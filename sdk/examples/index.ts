@@ -10,9 +10,11 @@ import {
 } from '../src'
 
 async function run() {
+    const now = Date.now() / 1000
     const marketOracle = await getAmpleforthMarketOracle()
     console.log('Market oracle', marketOracle.getData().toString())
     console.log('Providers ', marketOracle.providers.length)
+    console.log('Median report', marketOracle.medianReportAt(now))
 
     const providerReports = await getOracleProviderReports(
         marketOracle,
@@ -23,6 +25,7 @@ async function run() {
     const cpiOracle = await getAmpleforthCPIOracle()
     console.log('CPI oracle', cpiOracle.getData().toString())
     console.log('Providers ', cpiOracle.providers.length)
+    console.log('Median report', cpiOracle.medianReportAt(now))
 
     const policy = await getAmpleforthPolicy()
     console.log('Epoch', policy.epoch.toString())
