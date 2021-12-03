@@ -40,6 +40,10 @@ export default class Provider {
     }
 
     get reports(): Report[] {
+        return this._reports
+    }
+
+    get activeReports(): Report[] {
         return this._reports.filter((r) => !r.purged)
     }
 
