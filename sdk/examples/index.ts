@@ -62,14 +62,14 @@ async function run() {
     console.log('User Approval', a.value.toString())
 
     // history
-    // const providerReports = await getOracleProviderReports(
-    //     marketOracle,
-    //     marketOracle.providers[0].id,
-    // )
-    // console.log(providerReports.length)
-    //
-    // const rebases = await getRebaseReports(policy)
-    // console.log('Rebases', rebases.length)
+    const providerReports = await getOracleProviderReports(
+        marketOracle,
+        marketOracle.providers[0].id,
+    )
+    console.log(providerReports.length)
+
+    const rebases = await getRebaseReports(policy)
+    console.log('Rebases', rebases.length)
 }
 
 run()

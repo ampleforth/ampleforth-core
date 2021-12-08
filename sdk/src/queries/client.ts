@@ -8,5 +8,5 @@ export const MAX_PER_PAGE = 100
 export const client = new Client({
     fetch,
     url: GRAPH_ENDPOINT,
-    requestPolicy: 'cache-first',
+    requestPolicy: 'network-only',
 })
