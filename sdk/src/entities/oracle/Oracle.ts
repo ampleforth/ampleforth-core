@@ -15,7 +15,7 @@ export default class Oracle {
     private _providers: Provider[] = []
 
     constructor(private data: OracleData) {
-        for (const provider of this.data.providers) {
+        for (const provider of this.data?.providers) {
             this._providers.push(new Provider(provider))
         }
     }
@@ -70,6 +70,7 @@ export default class Oracle {
                 ? activeReports[activeReports.length - 1]
                 : null
         })
+
         return _reports && _reports.length >= this.minimumProviders
             ? Report.median(_reports as Report[])
             : null

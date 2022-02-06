@@ -100,6 +100,7 @@ export default class Policy {
             .div(this.rebaseLag)
     }
 
+    // TODO: convert this to binary search
     getSupplyOn(dt: string): BigNumber {
         const ts = new BigNumber(dt)
         for (let r = 0; r < this.historicalRebases.length - 1; r++) {

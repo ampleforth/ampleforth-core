@@ -10,8 +10,23 @@ export interface TokenApprovalData {
     valueExact: string
 }
 
+const emptyTokenApproval: TokenApprovalData = {
+    id: '0x',
+    token: {
+        id: '0x',
+    },
+    owner: '0x',
+    spender: '0x',
+    value: '0',
+    valueExact: '0',
+}
+
 export default class TokenApproval {
-    constructor(private data: TokenApprovalData) {}
+    constructor(private data: TokenApprovalData) {
+        if (!data) {
+            this.data = emptyTokenApproval
+        }
+    }
 
     get token(): string {
         return this.data.token.id
