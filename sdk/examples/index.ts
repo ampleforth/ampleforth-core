@@ -70,6 +70,7 @@ async function printAMPLData(chainID: number) {
 
     const rebases = await getRebases(policy, chainID)
     console.log('Rebases', rebases.length)
+    policy.loadHistoricalRebases(rebases)
 }
 
 async function printXCAmpleData(chainID: number) {
@@ -98,6 +99,7 @@ async function printXCAmpleData(chainID: number) {
 
     const rebases = await getXCRebases(xcController, chainID)
     console.log('Rebases', rebases.length)
+    xcController.loadHistoricalRebases(rebases)
 }
 
 async function run() {

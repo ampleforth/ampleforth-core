@@ -21,7 +21,9 @@ export default class Policy {
     constructor(private data: PolicyData) {
         this.lastRebase = new Rebase(this.data.lastRebase)
         if (this.data.historicalRebases) {
-            this.loadHistoricalRebases(this.data.historicalRebases)
+            this.loadHistoricalRebases(
+                this.data.historicalRebases.map(r => new Rebase(r))
+            )
         }
     }
 
@@ -113,9 +115,9 @@ export default class Policy {
         return this.supply
     }
 
-    loadHistoricalRebases(rebases: RebaseData[]): void {
+    loadHistoricalRebases(rebases: Rebase[]): void {
         for (const rebase of rebases) {
-            this.historicalRebases.push(new Rebase(rebase))
+            this.historicalRebases.push(rebase)
         }
         this.historicalRebases = this.historicalRebases.sort((r1, r2) =>
             r1.timestamp.comparedTo(r2.timestamp),
