@@ -24,6 +24,6 @@ export const initializeClient = (chainID = 1): Client => {
     return new Client({
         fetch,
         url: GRAPH_ENDPOINTS[chainID],
-        requestPolicy: 'network-only',
+        requestPolicy: 'cache-and-network',
     })
 }

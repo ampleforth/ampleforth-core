@@ -16,7 +16,7 @@ export default class XCController {
         this.lastRebase = new XCRebase(this.data.lastRebase)
         if (this.data.historicalRebases) {
             this.loadHistoricalRebases(
-                this.data.historicalRebases.map(r => new XCRebase(r))
+                this.data.historicalRebases.map((r) => new XCRebase(r)),
             )
         }
     }

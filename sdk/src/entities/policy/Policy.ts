@@ -22,7 +22,7 @@ export default class Policy {
         this.lastRebase = new Rebase(this.data.lastRebase)
         if (this.data.historicalRebases) {
             this.loadHistoricalRebases(
-                this.data.historicalRebases.map(r => new Rebase(r))
+                this.data.historicalRebases.map((r) => new Rebase(r)),
             )
         }
     }
