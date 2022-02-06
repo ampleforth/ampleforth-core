@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "license": "GPL-3.0-or-later",
   "scripts": {
+    "auth": "graph auth  --studio",
     "codegen": "graph codegen --output-dir ./generated",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ aalavandhan/ampleforth",
-    "create-local": "graph create --node http://localhost:8020/ ampleforth/subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ ampleforth/subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ampleforth/subgraph",
-    "format": "yarn prettier --config .prettierrc --write '**/*.ts'"
+    "format": "yarn prettier --config .prettierrc --write '**/*.ts'",
+    "create-local": "graph create --node http://localhost:8020/ ampleforth/ampleforth-core",
+    "remove-local": "graph remove --node http://localhost:8020/ ampleforth/ampleforth-core",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ampleforth/ampleforth-core"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.21.1",

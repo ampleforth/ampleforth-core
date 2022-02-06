@@ -1,5 +1,5 @@
 import { constants } from '@amxx/graphprotocol-utils'
-import { ethereum, log } from '@graphprotocol/graph-ts'
+import { ethereum } from '@graphprotocol/graph-ts'
 import {
   LogRebase,
   Approval,
@@ -12,12 +12,13 @@ import {
   refreshToken,
   fetchTokenApproval,
   fetchTokenBalance,
+  refreshTokenApproval,
 } from '../fetch/token'
 import { formatAMPL, formatEther } from '../utils'
 
 // Triggered when "setMonetaryPolicy" is invoked
 // refreshes store
-export function handleHyperParamUpdate(call: ethereum.Call): void {
+export function handleStorageUpdate(call: ethereum.Call): void {
   let token = fetchToken(call.to)
   refreshToken(token)
   token.save()
@@ -50,6 +51,16 @@ export function handleTransfer(event: Transfer): void {
 
   scaledSenderBalance.save()
   scaledRecepientBalance.save()
+
+  // NOTE: some transfer events modify approvals but do not emit the "Approval" event
+  // so making a web3 call to get the latest data and update the store.
+  let approval = fetchTokenApproval(
+    token,
+    event.params.from,
+    event.transaction.from,
+  )
+  refreshTokenApproval(token, approval)
+  approval.save()
 }
 
 // Triggered on the "Approval" event
@@ -62,34 +73,6 @@ export function handleApproval(event: Approval): void {
     event.params.spender,
   )
   approval.valueExact = event.params.value
-  approval.value = formatAMPL(approval.valueExact)
-  approval.save()
-}
-
-// Triggered when "transferFrom" is invoked
-// NOTE: transferFrom does not emit Approval event
-// updates store with the new approval amount to keep store in sync
-export function handleApprovalUpdateOnTransferFrom(
-  call: TransferFromCall,
-): void {
-  let token = fetchToken(call.to)
-  let approval = fetchTokenApproval(token, call.inputs.from, call.from)
-  approval.valueExact = approval.valueExact.minus(call.inputs.value)
-  approval.value = formatAMPL(approval.valueExact)
-  approval.save()
-}
-
-// Triggered when "transferAllFrom" is invoked
-// NOTE: transferAllFrom does not emit Approval event
-// updates store with the new approval amount to keep store in sync
-export function handleApprovalUpdateOnTransferAllFrom(
-  call: TransferAllFromCall,
-): void {
-  let token = fetchToken(call.to)
-  let approval = fetchTokenApproval(token, call.inputs.from, call.from)
-  let scaledBalance = fetchTokenBalance(token, call.inputs.from)
-  let balanceValueExact = scaledBalance.valueExact.div(token.balanceScalar)
-  approval.valueExact = approval.valueExact.minus(balanceValueExact)
   approval.value = formatAMPL(approval.valueExact)
   approval.save()
 }
