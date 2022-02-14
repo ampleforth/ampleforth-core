@@ -1,6 +1,7 @@
 import * as abis from './abis'
 import * as deployments from './deployments'
 import * as queries from './queries'
+import * as entities from './entities'
 
 import {
     Oracle,
@@ -14,6 +15,7 @@ import {
     XCToken,
     XCRebase,
 } from './entities'
+
 import {
     initializeClient,
     MAX_PER_PAGE,
@@ -324,6 +326,7 @@ export {
     abis,
     deployments,
     queries,
+    entities,
     // Query methods
     getOracle,
     getOracleProviderReports,
