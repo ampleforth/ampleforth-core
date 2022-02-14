@@ -36,4 +36,8 @@ export default class XCRebase {
     get rebasePerc(): BigNumber {
         return new BigNumber(this.data.precentageChange)
     }
+
+    get rawData(): XCRebaseData {
+        return this.data
+    }
 }

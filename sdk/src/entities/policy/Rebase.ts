@@ -51,4 +51,8 @@ export default class Rebase {
     get marketCap(): BigNumber {
         return this.price.multipliedBy(this.supply)
     }
+
+    get rawData(): RebaseData {
+        return this.data
+    }
 }
