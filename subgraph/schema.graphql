@@ -31,7 +31,7 @@ type OracleReport @entity {
 
 type Policy @entity {
   id: ID!
-  token: [Token!]! @derivedFrom(field: "policy")
+  token: Token! @derivedFrom(field: "policy")
   address: Bytes!
   baseCPI: BigDecimal!
   rebaseLag: BigInt!
@@ -90,3 +90,58 @@ type Token @entity {
   approvals: [TokenApproval!]! @derivedFrom(field: "token")
 }
 
+type XCRebase @entity {
+  id: ID!
+  controller: XCController!
+  epoch: BigInt!
+  timestamp: BigInt!
+  supply: BigDecimal!
+  previousSupply: BigDecimal!
+  precentageChange: BigDecimal!
+  supplyAdjustment: BigDecimal!
+}
+
+type XCController @entity {
+  id: ID!
+  token: XCToken!
+  address: Bytes!
+  globalAmpleforthEpoch: BigInt!
+  nextGlobalAmpleforthEpoch: BigInt!
+  nextGlobalAMPLSupply: BigDecimal!
+  nextGlobalAMPLSupplyExact: BigInt!
+  lastRebase: XCRebase
+  historicalRebases: [XCRebase!]! @derivedFrom(field: "controller")
+}
+
+type XCTokenBalance @entity {
+  id: ID!
+  token: XCToken!
+  account: Bytes!
+  value: BigDecimal!
+  valueExact: BigInt!
+}
+
+type XCTokenApproval @entity {
+  id: ID!
+  token: XCToken!
+  owner: Bytes!
+  spender: Bytes!
+  value: BigDecimal!
+  valueExact: BigInt!
+}
+
+type XCToken @entity {
+  id: ID!
+  address: Bytes!
+  controller: XCController!
+  decimals: Int!
+  name: String!
+  symbol: String!
+  balanceScalar: BigInt!
+  globalAMPLSupply: BigDecimal!
+  globalAMPLSupplyExact: BigInt!
+  totalSupply: BigDecimal!
+  totalSupplyExact: BigInt!
+  scaledBalances: [XCTokenBalance!]! @derivedFrom(field: "token")
+  approvals: [XCTokenApproval!]! @derivedFrom(field: "token")
+}

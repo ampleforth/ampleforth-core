@@ -31,8 +31,8 @@ export const GET_POLICY_DATA = `
   }
 `
 
-export const GET_REBASE_REPORTS = `
-  query GetRebaseReports ($id: ID!, $first: Int!, $skip: Int) {
+export const GET_REBASES = `
+  query GetRebases ($id: ID!, $first: Int!, $skip: Int) {
     rebases(where: { policy: $id },
       first: $first,
       skip: $skip,

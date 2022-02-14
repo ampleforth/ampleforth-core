@@ -44,8 +44,8 @@ export function fetchTokenBalance(
     balance = new TokenBalance(id)
     balance.token = token.id
     balance.account = account
-    balance.value = constants.BIGDECIMAL_ZERO
     balance.valueExact = constants.BIGINT_ZERO
+    balance.value = constants.BIGDECIMAL_ZERO
   }
   return balance as TokenBalance
 }
@@ -65,8 +65,24 @@ export function fetchTokenApproval(
     approval.token = token.id
     approval.owner = owner
     approval.spender = spender
-    approval.value = constants.BIGDECIMAL_ZERO
     approval.valueExact = constants.BIGINT_ZERO
+    approval.value = constants.BIGDECIMAL_ZERO
   }
   return approval as TokenApproval
+}
+
+// NOTE: transferFrom and transferAllFrom do not emit approvals
+// so on these function calls we query the contract to get the updated
+// approval amounts
+export function refreshTokenApproval(
+  token: Token,
+  approval: TokenApproval,
+): void {
+  let tokenAddress = Address.fromHexString(token.id) as Address
+  let tokenContract = TokenABI.bind(tokenAddress)
+  approval.valueExact = tokenContract.allowance(
+    approval.owner as Address,
+    approval.spender as Address,
+  )
+  approval.value = formatAMPL(approval.valueExact)
 }

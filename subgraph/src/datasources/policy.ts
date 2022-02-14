@@ -7,7 +7,7 @@ import { formatAMPL, formatEther } from '../utils'
 // Triggered when either "setDeviationThreshold" or "setRebaseLag"
 // or "setRebaseTimingParameters" is invoked
 // refreshes all the hyper parameter values in the store
-export function handleHyperParamUpdate(call: ethereum.Call): void {
+export function handleStorageUpdate(call: ethereum.Call): void {
   let policy = fetchPolicy(call.to)
   refreshPolicy(policy)
   policy.save()

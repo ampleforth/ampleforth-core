@@ -19,7 +19,7 @@ import { increment, formatEther } from '../utils'
 // Triggered when either "setReportDelaySec" or "setReportExpirationTimeSec"
 // or "setMinimumProviders" is invoked
 // refreshes all the hyper parameter values in the store
-export function handleHyperParamUpdate(call: ethereum.Call): void {
+export function handleStorageUpdate(call: ethereum.Call): void {
   let oracle = fetchMedianOracle(call.to)
   refreshMedianOracle(oracle)
   oracle.save()

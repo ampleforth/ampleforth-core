@@ -14,26 +14,22 @@ Run a local instance of the graph node:
 ```
 git clone https://github.com/graphprotocol/graph-node
 cd graph-node/docker
+
 # update docker-compose.yaml with alchemy rpc endpoint
 docker-compose up
 ```
 
-To build and deploy the subgraph on your local graph node:
-
+Setup project:
 ```
-./scripts/prepare.sh mainnet # or kovan
-yarn remove-local # skip if deploying for the first time
-yarn create-local
-yarn deploy-local
+yarn global add mustache
+yarn
 ```
 
-To deploy the subgraph to prod:
+To build and deploy the subgraph to the graph hosted service:
 
 ```
-./scripts/prepare.sh mainnet
+./scripts/deploy.sh kovan ampleforth/ampleforth-core-kovan
+./scripts/deploy.sh mainnet ampleforth/ampleforth-core
 
-# create an account with thegraph.com and get access key
-yarn graph auth --product hosted-service <ACCESS_TOKEN>
-
-yarn deploy
+./scripts/deploy.sh avalanche ampleforth/ampleforth-core-avalanche
 ```

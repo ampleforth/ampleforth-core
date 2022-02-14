@@ -1,16 +1,16 @@
 specVersion: 0.0.2
 description: Subgraph for the Ampleforth protocol contracts on ethereum
-repository: https://github.com/ampleforth/ampleforth-subgraph
+repository: https://github.com/ampleforth/ampleforth-core
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: CPIOracle
-    network: kovan
+    network: "{{ network }}"
     source:
       abi: OracleABI
-      address: '0xCedc17B394051d0E222797588f3e5ECe5023FB4A'
-      startBlock: 11666618
+      address: "{{ cpiOracle }}"
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -21,11 +21,11 @@ dataSources:
         - MedianOracle
       callHandlers:
         - function: setReportDelaySec(uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
         - function: setReportExpirationTimeSec(uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
         - function: setMinimumProviders(uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
         - function: pushReport(uint256)
           handler: handlePushReport
         - function: purgeReports()
@@ -40,11 +40,11 @@ dataSources:
 
   - kind: ethereum/contract
     name: MarketOracle
-    network: kovan
+    network: "{{ network }}"
     source:
       abi: OracleABI
-      address: '0xFC344AF21d647f4244B5F098203A178BF26c51Dc'
-      startBlock: 11666602
+      address: "{{ marketOracle }}"
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -55,11 +55,11 @@ dataSources:
         - MedianOracle
       callHandlers:
         - function: setReportDelaySec(uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
         - function: setReportExpirationTimeSec(uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
         - function: setMinimumProviders(uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
         - function: pushReport(uint256)
           handler: handlePushReport
         - function: purgeReports()
@@ -74,11 +74,11 @@ dataSources:
 
   - kind: ethereum/contract
     name: Policy
-    network: kovan
+    network: "{{ network }}"
     source:
       abi: PolicyABI
-      address: '0xBB4617d26E704Ac0568E1cbf5232990a8b7846A4'
-      startBlock: 11666553
+      address: "{{ monetaryPolicy }}"
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -89,11 +89,11 @@ dataSources:
         - Policy
       callHandlers:
         - function: setDeviationThreshold(uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
         - function: setRebaseLag(uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
         - function: setRebaseTimingParameters(uint256,uint256,uint256)
-          handler: handleHyperParamUpdate
+          handler: handleStorageUpdate
       eventHandlers:
         - event: LogRebase(indexed uint256,uint256,uint256,int256,uint256)
           handler: handleRebase
@@ -102,11 +102,11 @@ dataSources:
 
   - kind: ethereum/contract
     name: Token
-    network: kovan
+    network: "{{ network }}"
     source:
       abi: TokenABI
-      address: '0x3E0437898a5667a4769B1Ca5A34aAB1ae7E81377'
-      startBlock: 11666536
+      address: "{{ token }}"
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -117,11 +117,7 @@ dataSources:
         - Token
       callHandlers:
         - function: setMonetaryPolicy(address)
-          handler: handleHyperParamUpdate
-        - function: transferFrom(address,address,uint256)
-          handler: handleApprovalUpdateOnTransferFrom
-        - function: transferAllFrom(address,address)
-          handler: handleApprovalUpdateOnTransferAllFrom
+          handler: handleStorageUpdate
       eventHandlers:
         - event: LogRebase(indexed uint256,uint256)
           handler: handleRebase
@@ -130,4 +126,60 @@ dataSources:
         - event: Approval(indexed address,indexed address,uint256)
           handler: handleApproval
       file: ./src/datasources/token.ts
+      language: wasm/assemblyscript
+
+  - kind: ethereum/contract
+    name: XCController
+    network: "{{ network }}"
+    source:
+      abi: XCControllerABI
+      address: "{{ xcController }}"
+      startBlock: {{ startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: XCControllerABI
+          file: ../sdk/src/abis/XCController.json
+        - name: XCTokenABI
+          file: ../sdk/src/abis/XCToken.json
+      entities:
+        - XCController
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleStorageUpdate
+        - event: GatewayRebaseReported(indexed address,indexed uint256,uint256,uint256)
+          handler: handleStorageUpdate
+        - event: LogRebase(indexed uint256,int256,uint256)
+          handler: handleRebase
+      file: ./src/datasources/xc_controller.ts
+      language: wasm/assemblyscript
+
+  - kind: ethereum/contract
+    name: XCToken
+    network: "{{ network }}"
+    source:
+      abi: XCTokenABI
+      address: "{{ xcToken }}"
+      startBlock: {{ startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      abis:
+        - name: XCTokenABI
+          file: ../sdk/src/abis/XCToken.json
+      entities:
+        - XCToken
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleStorageUpdate
+        - event: ControllerUpdated(address)
+          handler: handleStorageUpdate
+        - event: LogRebase(indexed uint256,uint256)
+          handler: handleStorageUpdate
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/datasources/xc_token.ts
       language: wasm/assemblyscript
