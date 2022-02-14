@@ -15,7 +15,9 @@ export default class XCController {
     constructor(private data: XCControllerData) {
         this.lastRebase = new XCRebase(this.data.lastRebase)
         if (this.data.historicalRebases) {
-            this.loadHistoricalRebases(this.data.historicalRebases)
+            this.loadHistoricalRebases(
+                this.data.historicalRebases.map((r) => new XCRebase(r)),
+            )
         }
     }
 
@@ -44,9 +46,9 @@ export default class XCController {
         return this.supply
     }
 
-    loadHistoricalRebases(rebases: XCRebaseData[]): void {
+    loadHistoricalRebases(rebases: XCRebase[]): void {
         for (const rebase of rebases) {
-            this.historicalRebases.push(new XCRebase(rebase))
+            this.historicalRebases.push(rebase)
         }
         this.historicalRebases = this.historicalRebases.sort((r1, r2) =>
             r1.timestamp.comparedTo(r2.timestamp),

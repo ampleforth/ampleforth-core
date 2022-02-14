@@ -14,7 +14,7 @@ export const GRAPH_ENDPOINTS: GraphEndpointsMapping = {
     43114: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core-avalanche`,
 }
 
-export const MAX_PER_PAGE = 100
+export const MAX_PER_PAGE = 500
 
 export const initializeClient = (chainID = 1): Client => {
     if (GRAPH_ENDPOINTS[chainID] === null) {
@@ -24,6 +24,6 @@ export const initializeClient = (chainID = 1): Client => {
     return new Client({
         fetch,
         url: GRAPH_ENDPOINTS[chainID],
-        requestPolicy: 'network-only',
+        requestPolicy: 'cache-and-network',
     })
 }
