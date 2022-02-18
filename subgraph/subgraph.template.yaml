@@ -26,11 +26,11 @@ dataSources:
           handler: handleStorageUpdate
         - function: setMinimumProviders(uint256)
           handler: handleStorageUpdate
-        - function: pushReport(uint256)
-          handler: handlePushReport
         - function: purgeReports()
           handler: handlePurgeReports
       eventHandlers:
+        - event: ProviderReportPushed(indexed address,uint256,uint256)
+          handler: handleProviderReportPushed
         - event: ProviderAdded(address)
           handler: handleAddProvider
         - event: ProviderRemoved(address)
@@ -60,11 +60,11 @@ dataSources:
           handler: handleStorageUpdate
         - function: setMinimumProviders(uint256)
           handler: handleStorageUpdate
-        - function: pushReport(uint256)
-          handler: handlePushReport
         - function: purgeReports()
           handler: handlePurgeReports
       eventHandlers:
+        - event: ProviderReportPushed(indexed address,uint256,uint256)
+          handler: handleProviderReportPushed
         - event: ProviderAdded(address)
           handler: handleAddProvider
         - event: ProviderRemoved(address)
