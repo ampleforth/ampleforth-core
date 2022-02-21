@@ -28,8 +28,13 @@ yarn
 To build and deploy the subgraph to the graph hosted service:
 
 ```
-./scripts/deploy.sh kovan ampleforth/ampleforth-core-kovan
-./scripts/deploy.sh mainnet ampleforth/ampleforth-core
+# temporary deployment
+./scripts/deploy.sh mainnet ampleforth/staging
 
+# testnet deployment
+./scripts/deploy.sh kovan ampleforth/ampleforth-core-kovan
+
+# production deployment
+./scripts/deploy.sh mainnet ampleforth/ampleforth-core
 ./scripts/deploy.sh avalanche ampleforth/ampleforth-core-avalanche
 ```

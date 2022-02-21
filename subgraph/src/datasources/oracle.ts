@@ -5,6 +5,7 @@ import {
   ProviderRemoved,
   PushReportCall,
   PurgeReportsCall,
+  ProviderReportPushed,
 } from '../../generated/MarketOracle/OracleABI'
 import {
   fetchMedianOracle,
@@ -25,32 +26,6 @@ export function handleStorageUpdate(call: ethereum.Call): void {
   oracle.save()
 }
 
-// Triggered when oracle provider invokes "pushReport"
-// updates provider store with new report
-export function handlePushReport(call: PushReportCall): void {
-  let oracle = fetchMedianOracle(call.to)
-  let provider = fetchOracleProvider(oracle, call.from)
-  let currentNonce = provider.reportCount
-
-  let report = fetchOracleReportByNonce(provider, currentNonce)
-  report.report = formatEther(call.inputs.payload)
-  report.timestamp = call.block.timestamp
-  report.nonce = currentNonce
-
-  let report1 = fetchOracleReport(provider, provider.report1)
-  let report2 = fetchOracleReport(provider, provider.report2)
-  if (report1.timestamp.le(report2.timestamp)) {
-    provider.report1 = report.id
-  } else {
-    provider.report2 = report.id
-  }
-
-  provider.reportCount = increment(currentNonce)
-
-  report.save()
-  provider.save()
-}
-
 // Triggered when oracle provider invokes "purgeReports"
 // invalidates active reports in provider store
 export function handlePurgeReports(call: PurgeReportsCall): void {
@@ -68,6 +43,34 @@ export function handlePurgeReports(call: PurgeReportsCall): void {
 
   report1.save()
   report2.save()
+}
+
+// Triggered when on "ProviderReportPushed" event
+// updates provider store with new report
+export function handleProviderReportPushed(event: ProviderReportPushed): void {
+  let oracle = fetchMedianOracle(event.address)
+  refreshMedianOracle(oracle)
+
+  let provider = fetchOracleProvider(oracle, event.params.provider)
+  let currentNonce = provider.reportCount
+
+  let report = fetchOracleReportByNonce(provider, currentNonce)
+  report.report = formatEther(event.params.payload)
+  report.timestamp = event.params.timestamp
+  report.nonce = currentNonce
+
+  let report1 = fetchOracleReport(provider, provider.report1)
+  let report2 = fetchOracleReport(provider, provider.report2)
+  if (report1.timestamp.le(report2.timestamp)) {
+    provider.report1 = report.id
+  } else {
+    provider.report2 = report.id
+  }
+  provider.reportCount = increment(currentNonce)
+
+  report.save()
+  provider.save()
+  oracle.save()
 }
 
 // Triggered when the "ProviderAdded" event fires
