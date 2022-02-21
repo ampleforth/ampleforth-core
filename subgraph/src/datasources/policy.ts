@@ -26,7 +26,7 @@ export function handleRebase(event: LogRebase): void {
   let rebase = fetchRebaseByEpoch(policy, currentEpoch)
   rebase.policy = policy.id
   rebase.epoch = currentEpoch
-  rebase.timestamp = event.block.timestamp
+  rebase.timestamp = event.params.timestampSec
   rebase.previousSupply = previousRebase.supply
   rebase.supplyAdjustment = formatAMPL(event.params.requestedSupplyAdjustment)
   rebase.supply = rebase.previousSupply.plus(rebase.supplyAdjustment)
