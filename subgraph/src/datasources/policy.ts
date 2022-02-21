@@ -17,6 +17,8 @@ export function handleStorageUpdate(call: ethereum.Call): void {
 // updates store with new rebase information
 export function handleRebase(event: LogRebase): void {
   let policy = fetchPolicy(event.address)
+  refreshPolicy(policy)
+
   let currentEpoch = event.params.epoch
   let previousEpoch = currentEpoch.minus(constants.BIGINT_ONE)
   let previousRebase = fetchRebaseByEpoch(policy, previousEpoch)

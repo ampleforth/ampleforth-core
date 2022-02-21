@@ -22,6 +22,7 @@ export function handleStorageUpdate(call: ethereum.Call): void {
 // updates store with new rebase information
 export function handleRebase(event: LogRebase): void {
   let controller = fetchController(event.address)
+  refreshController(controller)
 
   let token = fetchToken(Address.fromHexString(controller.token) as Address)
   refreshToken(token)
