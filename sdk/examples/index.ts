@@ -30,6 +30,8 @@ async function printAMPLData(chainID: number) {
     console.log('Supply', policy.supply.toString())
 
     const nextRebaseTimestampSec = policy.nextRebaseWindow()[0].toNumber()
+    console.log('Next rebase timestamp', nextRebaseTimestampSec)
+
     const rate = marketOracle.medianReportAt(nextRebaseTimestampSec)
     if (rate) {
         console.log('Median rate report at rebase', rate.toString())

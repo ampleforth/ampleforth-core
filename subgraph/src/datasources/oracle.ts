@@ -30,8 +30,9 @@ export function handleStorageUpdate(call: ethereum.Call): void {
 // invalidates active reports in provider store
 export function handlePurgeReports(call: PurgeReportsCall): void {
   let oracle = fetchMedianOracle(call.to)
-  let provider = fetchOracleProvider(oracle, call.from)
+  refreshMedianOracle(oracle)
 
+  let provider = fetchOracleProvider(oracle, call.from)
   let report1 = fetchOracleReport(provider, provider.report1)
   let report2 = fetchOracleReport(provider, provider.report2)
 
