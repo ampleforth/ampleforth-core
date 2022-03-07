@@ -17,3 +17,10 @@ console.log(ampl.totalSupply.toString())
 const b = await getTokenBalance(ampl, '0x1e6bb68acec8fefbd87d192be09bb274170a0548')
 console.log(b.balance.toString())
 ```
+
+## Publish
+
+```
+yarn build
+npm publish --access public
+```
