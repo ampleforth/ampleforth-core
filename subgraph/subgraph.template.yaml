@@ -94,6 +94,12 @@ dataSources:
           handler: handleStorageUpdate
         - function: setRebaseTimingParameters(uint256,uint256,uint256)
           handler: handleStorageUpdate
+        - function: setRebaseFunctionLowerPercentage(int256)
+          handler: handleStorageUpdate
+        - function: setRebaseFunctionUpperPercentage(int256)
+          handler: handleStorageUpdate
+        - function: setRebaseFunctionGrowth(int256)
+          handler: handleStorageUpdate
       eventHandlers:
         - event: LogRebase(indexed uint256,uint256,uint256,int256,uint256)
           handler: handleRebase
