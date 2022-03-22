@@ -5,9 +5,9 @@ export interface PolicyData {
     id: string
     address: string
     baseCPI: string
-		rebaseFunctionLowerPercentage: string
-		rebaseFunctionUpperPercentage: string
-		rebaseFunctionGrowth: string
+    rebaseFunctionLowerPercentage: string
+    rebaseFunctionUpperPercentage: string
+    rebaseFunctionGrowth: string
     rebaseLag: string
     deviationThreshold: string
     minRebaseTimeIntervalSec: string
@@ -113,20 +113,28 @@ export default class Policy {
             return new BigNumber('0')
         }
 
-				const delta = new BigNumber(marketRate).div(targetRate).minus(BigNumber('1'))
-				let exp = new BigNumber(this.rebaseFunctionGrowth).multipliedBy(delta)
-				exp = BigNumber.maximum(BigNumber('100'), exp)
-				exp = BigNumber.minimum(BigNumber('-100'), exp)
-				const pow = new BigNumber('2').exponentiatedBy(exp)
-				if (pow.isEqualTo(BigNumber('0'))) {
-					return new BigNumber('0')
-				}
+        const delta = new BigNumber(marketRate)
+            .div(targetRate)
+            .minus(new BigNumber('1'))
+        let exp = new BigNumber(this.rebaseFunctionGrowth).multipliedBy(delta)
+        exp = BigNumber.maximum(new BigNumber('100'), exp)
+        exp = BigNumber.minimum(new BigNumber('-100'), exp)
+        const pow = new BigNumber('2').exponentiatedBy(exp)
+        if (pow.isEqualTo(new BigNumber('0'))) {
+            return new BigNumber('0')
+        }
 
-				const numerator = new BigNumber(this.rebaseFunctionUpperPercentage).sub(BigNumber(this.rebaseFunctionUpperPercentage))
-				const intermediate = new BigNumber(this.rebaseFunctionUpper).div(BigNumber(this.rebaseFunctionLower)).div(pow)
-				const denominator = new BigNumber('1').minus(intermediate)
+        const numerator = new BigNumber(
+            this.rebaseFunctionUpperPercentage,
+        ).minus(new BigNumber(this.rebaseFunctionUpperPercentage))
+        const intermediate = new BigNumber(this.rebaseFunctionUpperPercentage)
+            .div(new BigNumber(this.rebaseFunctionLowerPercentage))
+            .div(pow)
+        const denominator = new BigNumber('1').minus(intermediate)
 
-				return new BigNumber(this.rebaseFunctionLower).plus(numerator.div(denominator))
+        return new BigNumber(this.rebaseFunctionLowerPercentage).plus(
+            numerator.div(denominator),
+        )
     }
 
     // TODO: convert this to binary search
