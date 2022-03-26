@@ -12,15 +12,24 @@ export function refreshPolicy(policy: Policy): void {
   let policyAddress = Address.fromHexString(policy.id) as Address
   let policyContract = PolicyABI.bind(policyAddress)
   policy.baseCPI = BASE_CPI
-  policy.rebaseFunctionLowerPercentage = formatEther(
-    policyContract.rebaseFunctionLowerPercentage(),
-  )
-  policy.rebaseFunctionUpperPercentage = formatEther(
-    policyContract.rebaseFunctionUpperPercentage(),
-  )
-  policy.rebaseFunctionGrowth = formatEther(
-    policyContract.rebaseFunctionGrowth(),
-  )
+  let lower = policyContract.try_rebaseFunctionLowerPercentage()
+  if (lower.reverted) {
+    log.info('rebaseFunctionLowerPercentage reverted', [])
+  } else {
+    policy.rebaseFunctionLowerPercentage = formatEther(lower)
+  }
+  let upper = policyContract.rebaseFunctionUpperPercentage()
+  if (upper.reverted) {
+    log.info('rebaseFunctionUpperPercentage reverted', [])
+  } else {
+    policy.rebaseFunctionUpperPercentage = formatEther(upper)
+  }
+  let growth = policyContract.rebaseFunctionGrowth()
+  if (growth.reverted) {
+    log.info('rebaseFunctionGrowth reverted', [])
+  } else {
+    policy.rebaseFunctionGrowth = formatEther(growth)
+  }
   policy.rebaseLag = policyContract.rebaseLag()
   policy.deviationThreshold = formatEther(policyContract.deviationThreshold())
   policy.minRebaseTimeIntervalSec = policyContract.minRebaseTimeIntervalSec()
