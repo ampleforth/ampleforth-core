@@ -113,10 +113,15 @@ export default class Policy {
             return new BigNumber('0')
         }
 
+        const upper = new BigNumber(this.rebaseFunctionUpperPercentage)
+        const lower = new BigNumber(this.rebaseFunctionLowerPercentage)
+        const growth = new BigNumber(this.rebaseFunctionGrowth)
+
         const delta = new BigNumber(marketRate)
             .div(targetRate)
             .minus(new BigNumber('1'))
-        let exp = new BigNumber(this.rebaseFunctionGrowth).multipliedBy(delta)
+
+        let exp = growth.multipliedBy(delta)
         exp = BigNumber.maximum(new BigNumber('100'), exp)
         exp = BigNumber.minimum(new BigNumber('-100'), exp)
         const pow = new BigNumber('2').exponentiatedBy(exp)
@@ -124,17 +129,11 @@ export default class Policy {
             return new BigNumber('0')
         }
 
-        const numerator = new BigNumber(
-            this.rebaseFunctionUpperPercentage,
-        ).minus(new BigNumber(this.rebaseFunctionUpperPercentage))
-        const intermediate = new BigNumber(this.rebaseFunctionUpperPercentage)
-            .div(new BigNumber(this.rebaseFunctionLowerPercentage))
-            .div(pow)
+        const numerator = upper.minus(lower)
+        const intermediate = upper.div(lower).div(pow)
         const denominator = new BigNumber('1').minus(intermediate)
 
-        return new BigNumber(this.rebaseFunctionLowerPercentage).plus(
-            numerator.div(denominator),
-        )
+        return lower.plus(numerator.div(denominator))
     }
 
     // TODO: convert this to binary search
