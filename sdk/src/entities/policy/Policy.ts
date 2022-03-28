@@ -116,6 +116,7 @@ export default class Policy {
         const upper = new BigNumber(this.rebaseFunctionUpperPercentage)
         const lower = new BigNumber(this.rebaseFunctionLowerPercentage)
         const growth = new BigNumber(this.rebaseFunctionGrowth)
+        const scaling = new BigNumber('32')
 
         const delta = new BigNumber(marketRate)
             .div(targetRate)
@@ -124,6 +125,12 @@ export default class Policy {
         let exp = growth.multipliedBy(delta)
         exp = BigNumber.maximum(new BigNumber('100'), exp)
         exp = BigNumber.minimum(new BigNumber('-100'), exp)
+        exp = exp.gte(new BigNumber('0'))
+            ? exp
+                  .multipliedBy(scaling)
+                  .dp(0, BigNumber.ROUND_FLOOR)
+                  .div(scaling)
+            : exp.multipliedBy(scaling).dp(0, BigNumber.ROUND_CEIL).div(scaling)
         const pow = new BigNumber('2').exponentiatedBy(exp)
         if (pow.isEqualTo(new BigNumber('0'))) {
             return new BigNumber('0')
