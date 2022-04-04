@@ -59,9 +59,7 @@ export default class Policy {
     }
 
     get rebaseLag(): BigNumber {
-        // NOTE: HOT FIX, till AIP-5 is deployed
-        // this.data.rebaseLag
-        return new BigNumber('10')
+        return new BigNumber(this.data.rebaseLag)
     }
 
     get deviationThreshold(): BigNumber {
