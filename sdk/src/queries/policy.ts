@@ -21,6 +21,9 @@ export const GET_POLICY_DATA = `
     policies(where: { id: $id }) {
       id
       baseCPI
+      rebaseFunctionLowerPercentage
+      rebaseFunctionUpperPercentage
+      rebaseFunctionGrowth
       rebaseLag
       deviationThreshold
       minRebaseTimeIntervalSec

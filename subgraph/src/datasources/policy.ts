@@ -4,7 +4,7 @@ import { LogRebase } from '../../generated/Policy/PolicyABI'
 import { fetchPolicy, refreshPolicy, fetchRebaseByEpoch } from '../fetch/policy'
 import { formatAMPL, formatEther } from '../utils'
 
-// Triggered when either "setDeviationThreshold" or "setRebaseLag"
+// Triggered when either "setDeviationThreshold"
 // or "setRebaseTimingParameters" is invoked
 // refreshes all the hyper parameter values in the store
 export function handleStorageUpdate(call: ethereum.Call): void {

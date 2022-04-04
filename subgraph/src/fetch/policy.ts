@@ -1,4 +1,4 @@
-import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
+import { Address, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts'
 import { constants } from '@amxx/graphprotocol-utils'
 import { PolicyABI } from '../../generated/Policy/PolicyABI'
 import { Policy, Rebase } from '../../generated/schema'
@@ -12,6 +12,24 @@ export function refreshPolicy(policy: Policy): void {
   let policyAddress = Address.fromHexString(policy.id) as Address
   let policyContract = PolicyABI.bind(policyAddress)
   policy.baseCPI = BASE_CPI
+  let lower = policyContract.try_rebaseFunctionLowerPercentage()
+  if (lower.reverted) {
+    log.info('rebaseFunctionLowerPercentage reverted', [])
+  } else {
+    policy.rebaseFunctionLowerPercentage = formatEther(lower.value)
+  }
+  let upper = policyContract.try_rebaseFunctionUpperPercentage()
+  if (upper.reverted) {
+    log.info('rebaseFunctionUpperPercentage reverted', [])
+  } else {
+    policy.rebaseFunctionUpperPercentage = formatEther(upper.value)
+  }
+  let growth = policyContract.try_rebaseFunctionGrowth()
+  if (growth.reverted) {
+    log.info('rebaseFunctionGrowth reverted', [])
+  } else {
+    policy.rebaseFunctionGrowth = formatEther(growth.value)
+  }
   policy.rebaseLag = policyContract.rebaseLag()
   policy.deviationThreshold = formatEther(policyContract.deviationThreshold())
   policy.minRebaseTimeIntervalSec = policyContract.minRebaseTimeIntervalSec()

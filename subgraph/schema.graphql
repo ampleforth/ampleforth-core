@@ -34,6 +34,9 @@ type Policy @entity {
   token: Token! @derivedFrom(field: "policy")
   address: Bytes!
   baseCPI: BigDecimal!
+  rebaseFunctionLowerPercentage: BigDecimal
+  rebaseFunctionUpperPercentage: BigDecimal
+  rebaseFunctionGrowth: BigDecimal
   rebaseLag: BigInt!
   deviationThreshold: BigDecimal!
   minRebaseTimeIntervalSec: BigInt!

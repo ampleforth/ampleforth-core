@@ -5,6 +5,9 @@ export interface PolicyData {
     id: string
     address: string
     baseCPI: string
+    rebaseFunctionLowerPercentage: string
+    rebaseFunctionUpperPercentage: string
+    rebaseFunctionGrowth: string
     rebaseLag: string
     deviationThreshold: string
     minRebaseTimeIntervalSec: string
@@ -39,14 +42,24 @@ export default class Policy {
         return this.lastRebase.supply
     }
 
+    get rebaseFunctionLowerPercentage(): BigNumber {
+        return new BigNumber(this.data.rebaseFunctionLowerPercentage)
+    }
+
+    get rebaseFunctionUpperPercentage(): BigNumber {
+        return new BigNumber(this.data.rebaseFunctionUpperPercentage)
+    }
+
+    get rebaseFunctionGrowth(): BigNumber {
+        return new BigNumber(this.data.rebaseFunctionGrowth)
+    }
+
     get baseCPI(): BigNumber {
         return new BigNumber(this.data.baseCPI)
     }
 
     get rebaseLag(): BigNumber {
-        // NOTE: HOT FIX, till AIP-5 is deployed
-        // this.data.rebaseLag
-        return new BigNumber('10')
+        return new BigNumber(this.data.rebaseLag)
     }
 
     get deviationThreshold(): BigNumber {
@@ -98,10 +111,34 @@ export default class Policy {
             return new BigNumber('0')
         }
 
-        return deviation
-            .multipliedBy(this.supply)
+        const upper = new BigNumber(this.rebaseFunctionUpperPercentage)
+        const lower = new BigNumber(this.rebaseFunctionLowerPercentage)
+        const growth = new BigNumber(this.rebaseFunctionGrowth)
+        const scaling = new BigNumber('32')
+
+        const delta = new BigNumber(marketRate)
             .div(targetRate)
-            .div(this.rebaseLag)
+            .minus(new BigNumber('1'))
+
+        let exp = growth.multipliedBy(delta)
+        exp = BigNumber.maximum(new BigNumber('100'), exp)
+        exp = BigNumber.minimum(new BigNumber('-100'), exp)
+        exp = exp.gte(new BigNumber('0'))
+            ? exp
+                  .multipliedBy(scaling)
+                  .dp(0, BigNumber.ROUND_FLOOR)
+                  .div(scaling)
+            : exp.multipliedBy(scaling).dp(0, BigNumber.ROUND_CEIL).div(scaling)
+        const pow = new BigNumber('2').exponentiatedBy(exp)
+        if (pow.isEqualTo(new BigNumber('0'))) {
+            return new BigNumber('0')
+        }
+
+        const numerator = upper.minus(lower)
+        const intermediate = upper.div(lower).div(pow)
+        const denominator = new BigNumber('1').minus(intermediate)
+
+        return lower.plus(numerator.div(denominator))
     }
 
     // TODO: convert this to binary search
