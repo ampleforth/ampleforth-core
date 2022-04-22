@@ -136,8 +136,8 @@ export default class Policy {
     }
 
     computeSupplyDelta(marketRate: string, cpi: string): BigNumber {
-      const nextRebasePercentage = this.nextRebasePerc(marketRate, cpi)
-      return this.supply.multipliedBy(nextRebasePercentage)
+        const nextRebasePercentage = this.nextRebasePerc(marketRate, cpi)
+        return this.supply.multipliedBy(nextRebasePercentage)
     }
 
     // TODO: convert this to binary search
