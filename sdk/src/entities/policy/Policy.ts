@@ -98,12 +98,6 @@ export default class Policy {
     }
 
     nextRebasePerc(marketRate: string, cpi: string): BigNumber {
-        const supplyDelta = this.computeSupplyDelta(marketRate, cpi)
-        const newSupply = this.supply.plus(supplyDelta)
-        return newSupply.div(this.supply).minus(1)
-    }
-
-    computeSupplyDelta(marketRate: string, cpi: string): BigNumber {
         const targetRate = new BigNumber(cpi).div(this.baseCPI)
         const deviation = new BigNumber(marketRate).minus(targetRate)
 
@@ -139,6 +133,11 @@ export default class Policy {
         const denominator = new BigNumber('1').minus(intermediate)
 
         return lower.plus(numerator.div(denominator))
+    }
+
+    computeSupplyDelta(marketRate: string, cpi: string): BigNumber {
+      const nextRebasePercentage = this.nextRebasePerc(marketRate, cpi)
+      return this.supply.multipliedBy(nextRebasePercentage)
     }
 
     // TODO: convert this to binary search
