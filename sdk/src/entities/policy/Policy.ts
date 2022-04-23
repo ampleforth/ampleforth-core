@@ -115,15 +115,15 @@ export default class Policy {
             .minus(new BigNumber('1'))
 
         let exp = growth.multipliedBy(delta)
-        exp = BigNumber.maximum(new BigNumber('100'), exp)
-        exp = BigNumber.minimum(new BigNumber('-100'), exp)
+        exp = BigNumber.minimum(new BigNumber('100'), exp)
+        exp = BigNumber.maximum(new BigNumber('-100'), exp)
         exp = exp.gte(new BigNumber('0'))
             ? exp
                   .multipliedBy(scaling)
                   .dp(0, BigNumber.ROUND_FLOOR)
                   .div(scaling)
             : exp.multipliedBy(scaling).dp(0, BigNumber.ROUND_CEIL).div(scaling)
-        const pow = new BigNumber('2').exponentiatedBy(exp)
+        const pow = new BigNumber(2**exp.toNumber())
         if (pow.isEqualTo(new BigNumber('0'))) {
             return new BigNumber('0')
         }
