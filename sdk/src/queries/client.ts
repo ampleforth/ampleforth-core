@@ -9,7 +9,7 @@ export const GRAPH_BASE_URL = 'https://api.thegraph.com/subgraphs/name'
 
 export const GRAPH_ENDPOINTS: GraphEndpointsMapping = {
     // chainID => endpoint
-    1: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core`,
+    1: 'https://gateway.thegraph.com/api/09f032e5d7ba7cc9725796c9ee511c17/subgraphs/id/3KgoMxpMHJsLK2R4W9hrF6S7WTYdcH9UW9vtnsGumY4s',
     42: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core-kovan`,
     43114: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core-avalanche`,
 }
