@@ -123,7 +123,7 @@ export default class Policy {
                   .dp(0, BigNumber.ROUND_FLOOR)
                   .div(scaling)
             : exp.multipliedBy(scaling).dp(0, BigNumber.ROUND_CEIL).div(scaling)
-        const pow = new BigNumber(2**exp.toNumber())
+        const pow = new BigNumber(2 ** exp.toNumber())
         if (pow.isEqualTo(new BigNumber('0'))) {
             return new BigNumber('0')
         }
