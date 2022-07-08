@@ -26,7 +26,6 @@ export const initializeApiKey = (apiKey: string): void => {
 export const initializeClient = (chainID = 1): Client => {
     if (GRAPH_ENDPOINTS[chainID] === undefined) {
       if (chainID === 1) {
-        console.log('chainid 1')
         throw new Error(`No graph endpoint found for chainID:1. Try updating your API Key with queries.initializeApiKey. See https://thegraph.com/studio/apikeys/ if you don't have an API Key`)
       }
         throw new Error(`No graph endpoint found for chainID:${chainID}`)
