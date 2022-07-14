@@ -15,19 +15,22 @@ export const GRAPH_ENDPOINTS: GraphEndpointsMapping = {
 
 export const MAX_PER_PAGE = 500
 
-export const AMPLEFORTH_DAO_SUBGRAPH_ID = '3KgoMxpMHJsLK2R4W9hrF6S7WTYdcH9UW9vtnsGumY4s'
+export const AMPLEFORTH_DAO_SUBGRAPH_ID =
+    '3KgoMxpMHJsLK2R4W9hrF6S7WTYdcH9UW9vtnsGumY4s'
 
 export const GRAPH_GATEWAY_URL = 'https://gateway.thegraph.com'
 
 export const initializeApiKey = (apiKey: string): void => {
-  GRAPH_ENDPOINTS[1] = `${GRAPH_GATEWAY_URL}/api/${apiKey}/subgraphs/id/${AMPLEFORTH_DAO_SUBGRAPH_ID}`
+    GRAPH_ENDPOINTS[1] = `${GRAPH_GATEWAY_URL}/api/${apiKey}/subgraphs/id/${AMPLEFORTH_DAO_SUBGRAPH_ID}`
 }
 
 export const initializeClient = (chainID = 1): Client => {
     if (GRAPH_ENDPOINTS[chainID] === undefined) {
-      if (chainID === 1) {
-        throw new Error(`No graph endpoint found for chainID:1. Try updating your API Key with queries.initializeApiKey. See https://thegraph.com/studio/apikeys/ if you don't have an API Key`)
-      }
+        if (chainID === 1) {
+            throw new Error(
+                `No graph endpoint found for chainID:1. Try updating your API Key with queries.initializeApiKey. See https://thegraph.com/studio/apikeys/ if you don't have an API Key`,
+            )
+        }
         throw new Error(`No graph endpoint found for chainID:${chainID}`)
     }
 

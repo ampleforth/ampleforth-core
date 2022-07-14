@@ -107,10 +107,12 @@ async function printXCAmpleData(chainID: number) {
 
 async function run() {
     if (process.argv.length < 3) {
-      console.log('provide API Key as command line argument to run mainnet example')
+        console.log(
+            'provide API Key as command line argument to run mainnet example',
+        )
     } else {
-      queries.initializeApiKey(process.argv[2])
-      await printAMPLData(1)
+        queries.initializeApiKey(process.argv[2])
+        await printAMPLData(1)
     }
     await printXCAmpleData(43114)
     await printAMPLData(42)
