@@ -10,6 +10,7 @@ import {
     getXCAmpleController,
     getXCRebases,
     getXCAmpleToken,
+    queries,
 } from '../src'
 
 async function printAMPLData(chainID: number) {
@@ -105,7 +106,12 @@ async function printXCAmpleData(chainID: number) {
 }
 
 async function run() {
-    await printAMPLData(1)
+    if (process.argv.length < 3) {
+      console.log('provide API Key as command line argument to run mainnet example')
+    } else {
+      queries.initializeApiKey(process.argv[2])
+      await printAMPLData(1)
+    }
     await printXCAmpleData(43114)
     await printAMPLData(42)
 }
