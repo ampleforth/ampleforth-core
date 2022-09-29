@@ -32,7 +32,7 @@ To build and deploy the subgraph to the graph hosted service:
 ./scripts/deploy.sh mainnet ampleforth/staging
 
 # testnet deployment
-./scripts/deploy.sh kovan ampleforth/ampleforth-core-kovan
+./scripts/deploy.sh goerli ampleforth/ampleforth-core-goerli
 
 # production deployment
 ./scripts/deploy.sh mainnet ampleforth/ampleforth-core

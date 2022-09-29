@@ -1,4 +1,4 @@
-import { default as Kovan } from './Kovan.json'
+import { default as Goerli } from './Goerli.json'
 import { default as Mainnet } from './Mainnet.json'
 import { default as Avalanche } from './Avalanche.json'
 
@@ -15,8 +15,8 @@ export function getDeployment(chainID: number): DeploymentData {
         case 1:
             return Mainnet
 
-        case 42:
-            return Kovan
+        case 5:
+            return Goerli
 
         default:
             throw new Error(
@@ -42,4 +42,4 @@ export function getXCDeployment(chainID: number): XCDeploymentData {
     }
 }
 
-export { Kovan, Mainnet, Avalanche }
+export { Goerli, Mainnet, Avalanche }

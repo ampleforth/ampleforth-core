@@ -115,7 +115,7 @@ async function run() {
         await printAMPLData(1)
     }
     await printXCAmpleData(43114)
-    await printAMPLData(42)
+    await printAMPLData(5)
 }
 
 run()
