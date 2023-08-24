@@ -1,4 +1,4 @@
-import { Client } from '@urql/core'
+import { Client, cacheExchange, fetchExchange } from '@urql/core'
 import fetch from 'isomorphic-unfetch'
 
 type GraphEndpointsMapping = {
@@ -37,6 +37,6 @@ export const initializeClient = (chainID = 1): Client => {
     return new Client({
         fetch,
         url: GRAPH_ENDPOINTS[chainID],
-        requestPolicy: 'cache-and-network',
+        exchanges: [cacheExchange, fetchExchange],
     })
 }

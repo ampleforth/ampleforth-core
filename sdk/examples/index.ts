@@ -111,7 +111,7 @@ async function run() {
             'provide API Key as command line argument to run mainnet example',
         )
     } else {
-        queries.initializeApiKey(process.argv[2])
+        queries.initializeApiKey(process.argv[process.argv.length-1])
         await printAMPLData(1)
     }
     await printXCAmpleData(43114)
