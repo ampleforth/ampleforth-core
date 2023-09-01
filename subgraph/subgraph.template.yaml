@@ -13,7 +13,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       abis:
         - name: OracleABI
           file: ../sdk/src/abis/MedianOracle.json
@@ -47,7 +47,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       abis:
         - name: OracleABI
           file: ../sdk/src/abis/MedianOracle.json
@@ -81,7 +81,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       abis:
         - name: PolicyABI
           file: ../sdk/src/abis/UFragmentsPolicy.json
@@ -113,7 +113,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       abis:
         - name: TokenABI
           file: ../sdk/src/abis/UFragments.json
@@ -132,58 +132,58 @@ dataSources:
       file: ./src/datasources/token.ts
       language: wasm/assemblyscript
 
-  - kind: ethereum/contract
-    name: XCController
-    network: "{{ network }}"
-    source:
-      abi: XCControllerABI
-      address: "{{ xcController }}"
-      startBlock: {{ startBlock }}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      abis:
-        - name: XCControllerABI
-          file: ../sdk/src/abis/XCController.json
-        - name: XCTokenABI
-          file: ../sdk/src/abis/XCToken.json
-      entities:
-        - XCController
-      eventHandlers:
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleStorageUpdate
-        - event: GatewayRebaseReported(indexed address,indexed uint256,uint256,uint256)
-          handler: handleStorageUpdate
-        - event: LogRebase(indexed uint256,int256,uint256)
-          handler: handleRebase
-      file: ./src/datasources/xc_controller.ts
-      language: wasm/assemblyscript
+  # - kind: ethereum/contract
+  #   name: XCController
+  #   network: "{{ network }}"
+  #   source:
+  #     abi: XCControllerABI
+  #     address: "{{ xcController }}"
+  #     startBlock: {{ startBlock }}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     abis:
+  #       - name: XCControllerABI
+  #         file: ../sdk/src/abis/XCController.json
+  #       - name: XCTokenABI
+  #         file: ../sdk/src/abis/XCToken.json
+  #     entities:
+  #       - XCController
+  #     eventHandlers:
+  #       - event: OwnershipTransferred(indexed address,indexed address)
+  #         handler: handleStorageUpdate
+  #       - event: GatewayRebaseReported(indexed address,indexed uint256,uint256,uint256)
+  #         handler: handleStorageUpdate
+  #       - event: LogRebase(indexed uint256,int256,uint256)
+  #         handler: handleRebase
+  #     file: ./src/datasources/xc_controller.ts
+  #     language: wasm/assemblyscript
 
-  - kind: ethereum/contract
-    name: XCToken
-    network: "{{ network }}"
-    source:
-      abi: XCTokenABI
-      address: "{{ xcToken }}"
-      startBlock: {{ startBlock }}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      abis:
-        - name: XCTokenABI
-          file: ../sdk/src/abis/XCToken.json
-      entities:
-        - XCToken
-      eventHandlers:
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleStorageUpdate
-        - event: ControllerUpdated(address)
-          handler: handleStorageUpdate
-        - event: LogRebase(indexed uint256,uint256)
-          handler: handleStorageUpdate
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-        - event: Approval(indexed address,indexed address,uint256)
-          handler: handleApproval
-      file: ./src/datasources/xc_token.ts
-      language: wasm/assemblyscript
+  # - kind: ethereum/contract
+  #   name: XCToken
+  #   network: "{{ network }}"
+  #   source:
+  #     abi: XCTokenABI
+  #     address: "{{ xcToken }}"
+  #     startBlock: {{ startBlock }}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     abis:
+  #       - name: XCTokenABI
+  #         file: ../sdk/src/abis/XCToken.json
+  #     entities:
+  #       - XCToken
+  #     eventHandlers:
+  #       - event: OwnershipTransferred(indexed address,indexed address)
+  #         handler: handleStorageUpdate
+  #       - event: ControllerUpdated(address)
+  #         handler: handleStorageUpdate
+  #       - event: LogRebase(indexed uint256,uint256)
+  #         handler: handleStorageUpdate
+  #       - event: Transfer(indexed address,indexed address,uint256)
+  #         handler: handleTransfer
+  #       - event: Approval(indexed address,indexed address,uint256)
+  #         handler: handleApproval
+  #     file: ./src/datasources/xc_token.ts
+  #     language: wasm/assemblyscript

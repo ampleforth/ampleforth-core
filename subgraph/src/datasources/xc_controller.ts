@@ -29,7 +29,7 @@ export function handleRebase(event: LogRebase): void {
 
   let currentEpoch = event.params.epoch
   let previousRebaseID = controller.lastRebase
-  let previousRebase = fetchRebase(controller, previousRebaseID)
+  let previousRebase = fetchRebase(controller, previousRebaseID!)
   let previousEpoch = previousRebase.epoch
 
   let rebase = fetchRebaseByEpoch(controller, currentEpoch)
