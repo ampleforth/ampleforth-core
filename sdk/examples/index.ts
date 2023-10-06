@@ -21,6 +21,10 @@ async function printAMPLData(chainID: number) {
     const marketOracle = await getAmpleforthMarketOracle(chainID)
     console.log('Market oracle', marketOracle.getData().toString())
     console.log('Providers ', marketOracle.providers.length)
+    for(const p in marketOracle.providers){
+        const provider = marketOracle.providers[p]
+        console.log(provider.address, provider.activeReports.map((r:any) => r.report.toString()))
+    }
 
     const cpiOracle = await getAmpleforthCPIOracle(chainID)
     console.log('CPI oracle', cpiOracle.getData().toString())
@@ -114,8 +118,8 @@ async function run() {
         queries.initializeApiKey(process.argv[process.argv.length-1])
         await printAMPLData(1)
     }
-    await printXCAmpleData(43114)
-    await printAMPLData(5)
+    // await printXCAmpleData(43114)
+    // await printAMPLData(5)
 }
 
 run()
