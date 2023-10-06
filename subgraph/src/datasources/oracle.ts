@@ -47,6 +47,8 @@ export function handlePurgeReports(call: PurgeReportsCall): void {
     report2.purged = true
     report2.save()
   }
+
+  oracle.save()
 }
 
 // Triggered when on "ProviderReportPushed" event
