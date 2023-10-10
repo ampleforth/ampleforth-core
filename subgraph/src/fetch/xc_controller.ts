@@ -8,7 +8,7 @@ import { formatAMPL } from '../utils'
 let INITIAL_SUPPLY = BigDecimal.fromString('50000000')
 
 export function refreshController(controller: XCController): void {
-  let controllerAddress = Address.fromHexString(controller.id) as Address
+  let controllerAddress = Address.fromString(controller.id)
   let controllerContract = XCControllerABI.bind(controllerAddress)
   controller.globalAmpleforthEpoch = controllerContract.globalAmpleforthEpoch()
   controller.nextGlobalAmpleforthEpoch =

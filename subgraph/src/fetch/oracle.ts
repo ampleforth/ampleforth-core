@@ -8,7 +8,7 @@ import {
 } from '../../generated/schema'
 
 export function refreshMedianOracle(oracle: MedianOracle): void {
-  let oracleAddress = Address.fromHexString(oracle.id) as Address
+  let oracleAddress = Address.fromString(oracle.id)
   let oracleContract = OracleABI.bind(oracleAddress)
 
   oracle.reportDelaySec = oracleContract.reportDelaySec()
@@ -38,9 +38,21 @@ export function fetchOracleProvider(
     provider.address = id
     provider.purged = false
     provider.oracle = oracle.id
-    provider.reportCount = constants.BIGINT_ZERO
-    provider.report1 = null
-    provider.report2 = null
+    provider.reportCount = BigInt.fromI32(2)
+    let report1 = fetchOracleReport(
+      provider,
+      providerId.concat('|').concat(BigInt.fromI32(0).toString()),
+    )
+    report1.purged = true
+    report1.save()
+    provider.report1 = report1.id
+    let report2 = fetchOracleReport(
+      provider,
+      providerId.concat('|').concat(BigInt.fromI32(1).toString()),
+    )
+    report2.purged = true
+    report2.save()
+    provider.report2 = report2.id
   }
   return provider as OracleProvider
 }

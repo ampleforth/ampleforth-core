@@ -24,7 +24,7 @@ export function handleRebase(event: LogRebase): void {
   let controller = fetchController(event.address)
   refreshController(controller)
 
-  let token = fetchToken(Address.fromHexString(controller.token) as Address)
+  let token = fetchToken(Address.fromString(controller.token))
   refreshToken(token)
 
   let currentEpoch = event.params.epoch

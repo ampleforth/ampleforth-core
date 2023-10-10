@@ -12,8 +12,8 @@
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs https://ipfs.network.thegraph.com ampleforth/ampleforth-core"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.56.0",
-    "@graphprotocol/graph-ts": "^0.25.0",
+    "@graphprotocol/graph-cli": "^0.59.0",
+    "@graphprotocol/graph-ts": "^0.31.0",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "eslint": "^6.2.2",

@@ -18,6 +18,7 @@ export function handleStorageUpdate(call: ethereum.Call): void {
 export function handleLogRebase(event: LogRebase): void {
   let policy = fetchPolicy(event.address)
   refreshPolicy(policy)
+  policy.save()
 
   let currentEpoch = event.params.epoch
   let previousEpoch = currentEpoch.minus(constants.BIGINT_ONE)
@@ -37,10 +38,9 @@ export function handleLogRebase(event: LogRebase): void {
 
   let cpi = formatEther(event.params.cpi)
   rebase.targetRate = cpi.div(policy.baseCPI)
+  rebase.save()
 
   policy.lastRebase = rebase.id
-
-  rebase.save()
   policy.save()
 }
 
@@ -49,6 +49,7 @@ export function handleLogRebase(event: LogRebase): void {
 export function handleLogRebaseV2(event: LogRebaseV2): void {
   let policy = fetchPolicy(event.address)
   refreshPolicy(policy)
+  policy.save()
 
   let currentEpoch = event.params.epoch
   let previousEpoch = currentEpoch.minus(constants.BIGINT_ONE)
@@ -66,9 +67,8 @@ export function handleLogRebaseV2(event: LogRebaseV2): void {
     .minus(constants.BIGDECIMAL_ONE)
   rebase.marketRate = formatEther(event.params.exchangeRate)
   rebase.targetRate = formatEther(event.params.targetRate)
+  rebase.save()
 
   policy.lastRebase = rebase.id
-
-  rebase.save()
   policy.save()
 }

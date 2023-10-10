@@ -21,12 +21,6 @@ dataSources:
       entities:
         - MedianOracle
       callHandlers:
-        - function: setReportDelaySec(uint256)
-          handler: handleStorageUpdate
-        - function: setReportExpirationTimeSec(uint256)
-          handler: handleStorageUpdate
-        - function: setMinimumProviders(uint256)
-          handler: handleStorageUpdate
         - function: purgeReports()
           handler: handlePurgeReports
       eventHandlers:
@@ -55,12 +49,6 @@ dataSources:
       entities:
         - MedianOracle
       callHandlers:
-        - function: setReportDelaySec(uint256)
-          handler: handleStorageUpdate
-        - function: setReportExpirationTimeSec(uint256)
-          handler: handleStorageUpdate
-        - function: setMinimumProviders(uint256)
-          handler: handleStorageUpdate
         - function: purgeReports()
           handler: handlePurgeReports
       eventHandlers:
@@ -89,12 +77,6 @@ dataSources:
       entities:
         - MedianOracle
       callHandlers:
-        - function: setReportDelaySec(uint256)
-          handler: handleStorageUpdate
-        - function: setReportExpirationTimeSec(uint256)
-          handler: handleStorageUpdate
-        - function: setMinimumProviders(uint256)
-          handler: handleStorageUpdate
         - function: purgeReports()
           handler: handlePurgeReports
       eventHandlers:
@@ -122,17 +104,6 @@ dataSources:
           file: ../sdk/src/abis/UFragmentsPolicy.json
       entities:
         - Policy
-      callHandlers:
-        - function: setDeviationThreshold(uint256)
-          handler: handleStorageUpdate
-        - function: setRebaseTimingParameters(uint256,uint256,uint256)
-          handler: handleStorageUpdate
-        - function: setRebaseFunctionLowerPercentage(int256)
-          handler: handleStorageUpdate
-        - function: setRebaseFunctionUpperPercentage(int256)
-          handler: handleStorageUpdate
-        - function: setRebaseFunctionGrowth(int256)
-          handler: handleStorageUpdate
       eventHandlers:
         - event: LogRebase(indexed uint256,uint256,uint256,int256,uint256)
           handler: handleLogRebase
@@ -156,9 +127,6 @@ dataSources:
           file: ../sdk/src/abis/UFragments.json
       entities:
         - Token
-      callHandlers:
-        - function: setMonetaryPolicy(address)
-          handler: handleStorageUpdate
       eventHandlers:
         - event: LogRebase(indexed uint256,uint256)
           handler: handleRebase
