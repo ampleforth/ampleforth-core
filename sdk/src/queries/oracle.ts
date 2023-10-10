@@ -34,8 +34,8 @@ export const GET_ORACLE_DATA = `
 `
 
 export const GET_PROVIDER_REPORTS = `
-  query GetReports ($providerID: ID!, $oracleID: ID!, $first: Int!, $skip: Int) {
-    oracleReports(where: { provider: $providerID, oracle: $oracleID },
+  query GetReports ($providerID: ID!, $first: Int!, $skip: Int) {
+    oracleReports(where: { provider: $providerID  },
       first: $first,
       skip: $skip,
       orderBy: timestamp,

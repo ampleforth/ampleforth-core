@@ -7,7 +7,9 @@ export interface DeploymentData {
     Policy: string
     Orchestrator: string
     CPIOracle: string
+    PrevCPIOracles: string[]
     MarketOracle: string
+    PrevMarketOracles: string[]
 }
 
 export function getDeployment(chainID: number): DeploymentData {

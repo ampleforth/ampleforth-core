@@ -1,42 +1,33 @@
 import { Client, cacheExchange, fetchExchange } from '@urql/core'
 import fetch from 'isomorphic-unfetch'
 
+export const MAX_PER_PAGE = 500
+export const GRAPH_GATEWAY_URL = 'https://gateway.thegraph.com'
+export const GRAPH_BASE_URL = 'https://api.thegraph.com/subgraphs/name'
+
 type GraphEndpointsMapping = {
     [key: number]: string
 }
-
-export const GRAPH_BASE_URL = 'https://api.thegraph.com/subgraphs/name'
-
 export const GRAPH_ENDPOINTS: GraphEndpointsMapping = {
     // chainID => endpoint
+    1: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core`,
     5: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core-goerli`,
     43114: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core-avalanche`,
 }
-
-export const MAX_PER_PAGE = 500
+export const graphHostedURL = (chainID = 1): string => {
+    return GRAPH_ENDPOINTS[chainID]
+}
 
 export const AMPLEFORTH_DAO_SUBGRAPH_ID =
     '3KgoMxpMHJsLK2R4W9hrF6S7WTYdcH9UW9vtnsGumY4s'
-
-export const GRAPH_GATEWAY_URL = 'https://gateway.thegraph.com'
-
-export const initializeApiKey = (apiKey: string): void => {
-    GRAPH_ENDPOINTS[1] = `${GRAPH_GATEWAY_URL}/api/${apiKey}/subgraphs/id/${AMPLEFORTH_DAO_SUBGRAPH_ID}`
+export const graphGatewayURL = (apiKey: string): string => {
+    return `${GRAPH_GATEWAY_URL}/api/${apiKey}/subgraphs/id/${AMPLEFORTH_DAO_SUBGRAPH_ID}`
 }
 
-export const initializeClient = (chainID = 1): Client => {
-    if (GRAPH_ENDPOINTS[chainID] === undefined) {
-        if (chainID === 1) {
-            throw new Error(
-                `No graph endpoint found for chainID:1. Try updating your API Key with queries.initializeApiKey. See https://thegraph.com/studio/apikeys/ if you don't have an API Key`,
-            )
-        }
-        throw new Error(`No graph endpoint found for chainID:${chainID}`)
-    }
-
+export const initializeClient = (url: string): Client => {
     return new Client({
         fetch,
-        url: GRAPH_ENDPOINTS[chainID],
+        url,
         exchanges: [cacheExchange, fetchExchange],
     })
 }
