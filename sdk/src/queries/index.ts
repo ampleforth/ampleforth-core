@@ -1,4 +1,10 @@
-import { initializeApiKey, initializeClient, MAX_PER_PAGE } from './client'
+import { Client } from '@urql/core'
+import {
+    graphHostedURL,
+    graphGatewayURL,
+    initializeClient,
+    MAX_PER_PAGE,
+} from './client'
 import { GET_ORACLE_DATA, GET_PROVIDER_REPORTS } from './oracle'
 import { GET_POLICY_DATA, GET_REBASES } from './policy'
 import { GET_TOKEN_DATA, GET_TOKEN_BALANCES, GET_TOKEN_APPROVAL } from './token'
@@ -10,9 +16,13 @@ import {
 } from './xc_token'
 
 export {
-    initializeApiKey,
+    // graph client
+    Client,
+    graphHostedURL,
+    graphGatewayURL,
     initializeClient,
     MAX_PER_PAGE,
+    // qeries
     GET_ORACLE_DATA,
     GET_PROVIDER_REPORTS,
     GET_POLICY_DATA,

@@ -54,6 +54,7 @@ export default class Policy {
         return new BigNumber(this.data.rebaseFunctionGrowth)
     }
 
+    // TODO: remove this
     get baseCPI(): BigNumber {
         return new BigNumber(this.data.baseCPI)
     }

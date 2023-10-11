@@ -14,8 +14,8 @@ type OracleProvider @entity {
   purged: Boolean!
   oracle: MedianOracle!
   reportCount: BigInt!
-  report1: OracleReport
-  report2: OracleReport
+  report1: OracleReport!
+  report2: OracleReport!
   historicalReports: [OracleReport!]! @derivedFrom(field: "provider")
 }
 

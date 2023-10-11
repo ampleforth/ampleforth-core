@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import { constants } from '@amxx/graphprotocol-utils'
 import { TokenABI } from '../../generated/Token/TokenABI'
 import { Token, TokenBalance, TokenApproval } from '../../generated/schema'
@@ -9,13 +9,13 @@ let SCALED_TOTAL_SUPPLY = BigInt.fromString(
 )
 
 export function refreshToken(token: Token): void {
-  let tokenAddress = Address.fromHexString(token.id) as Address
+  let tokenAddress = Address.fromString(token.id)
   let tokenContract = TokenABI.bind(tokenAddress)
 
   token.decimals = tokenContract.decimals()
   token.name = tokenContract.name()
   token.symbol = tokenContract.symbol()
-  token.policy = tokenContract.monetaryPolicy().toString()
+  token.policy = tokenContract.monetaryPolicy().toHexString()
 
   token.totalSupplyExact = tokenContract.totalSupply()
   token.totalSupply = formatAMPL(token.totalSupplyExact)
@@ -78,11 +78,11 @@ export function refreshTokenApproval(
   token: Token,
   approval: TokenApproval,
 ): void {
-  let tokenAddress = Address.fromHexString(token.id) as Address
+  let tokenAddress = Address.fromString(token.id)
   let tokenContract = TokenABI.bind(tokenAddress)
   approval.valueExact = tokenContract.allowance(
-    approval.owner as Address,
-    approval.spender as Address,
+    Address.fromString(approval.owner.toHexString()),
+    Address.fromString(approval.spender.toHexString()),
   )
   approval.value = formatAMPL(approval.valueExact)
 }

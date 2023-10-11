@@ -3,5 +3,7 @@
     "Policy": "0x047b82a5D79d9DF62dE4f34CbaBa83F71848a6BF",
     "Orchestrator": "0x0ec93391752ef1A06AA2b83D15c3a5814651C891",
     "CPIOracle": "0x53c75D13a07AA02615Cb43e942829862C963D9bf",
-    "MarketOracle": "0xd4F96E4aC4B4f4E2359734a89b5484196298B69D"
+    "PrevCPIOracles": [],
+    "MarketOracle": "0xd4F96E4aC4B4f4E2359734a89b5484196298B69D",
+    "PrevMarketOracles": []
 }

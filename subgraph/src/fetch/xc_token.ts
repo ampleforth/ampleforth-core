@@ -13,7 +13,7 @@ let SCALED_GLOBAL_SUPPLY = BigInt.fromString(
 )
 
 export function refreshToken(token: XCToken): void {
-  let tokenAddress = Address.fromHexString(token.id) as Address
+  let tokenAddress = Address.fromString(token.id)
   let tokenContract = XCTokenABI.bind(tokenAddress)
   token.decimals = tokenContract.decimals()
   token.name = tokenContract.name()
@@ -77,9 +77,9 @@ export function refreshTokenBalance(
   token: XCToken,
   balance: XCTokenBalance,
 ): void {
-  let tokenAddress = Address.fromHexString(token.id) as Address
+  let tokenAddress = Address.fromString(token.id)
   let tokenContract = XCTokenABI.bind(tokenAddress)
-  let unscaledBalance = tokenContract.balanceOf(balance.account as Address)
+  let unscaledBalance = tokenContract.balanceOf(balance.account)
   balance.valueExact = token.balanceScalar.times(unscaledBalance)
   balance.value = formatAMPL(balance.valueExact)
 }
@@ -88,11 +88,11 @@ export function refreshTokenApproval(
   token: XCToken,
   approval: XCTokenApproval,
 ): void {
-  let tokenAddress = Address.fromHexString(token.id) as Address
+  let tokenAddress = Address.fromString(token.id)
   let tokenContract = XCTokenABI.bind(tokenAddress)
   approval.valueExact = tokenContract.allowance(
-    approval.owner as Address,
-    approval.spender as Address,
+    Address.fromString(approval.owner.toHexString()),
+    Address.fromString(approval.spender.toHexString()),
   )
   approval.value = formatAMPL(approval.valueExact)
 }

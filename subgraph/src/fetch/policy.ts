@@ -9,7 +9,7 @@ let INITIAL_SUPPLY = BigDecimal.fromString('50000000')
 let INITIAL_RATE = constants.BIGDECIMAL_ONE
 
 export function refreshPolicy(policy: Policy): void {
-  let policyAddress = Address.fromHexString(policy.id) as Address
+  let policyAddress = Address.fromString(policy.id)
   let policyContract = PolicyABI.bind(policyAddress)
   policy.baseCPI = BASE_CPI
   let lower = policyContract.try_rebaseFunctionLowerPercentage()

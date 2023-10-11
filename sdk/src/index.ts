@@ -17,7 +17,6 @@ import {
 } from './entities'
 
 import {
-    initializeClient,
     MAX_PER_PAGE,
     GET_ORACLE_DATA,
     GET_PROVIDER_REPORTS,
@@ -33,23 +32,37 @@ import {
     GET_XC_TOKEN_APPROVAL,
 } from './queries'
 
+const DEFAULT_CHAIN_ID = 1
+const DEFAULT_CLIENT = queries.initializeClient(
+    queries.graphHostedURL(DEFAULT_CHAIN_ID),
+)
+
 // Query methods
-async function getOracle(address: string, chainID: number): Promise<Oracle> {
-    const dt = await initializeClient(chainID)
+async function getOracle(
+    address: string,
+    client: queries.Client,
+): Promise<Oracle> {
+    const dt = await client
         .query(GET_ORACLE_DATA, { id: address.toLowerCase() })
         .toPromise()
     return new Oracle(dt.data.medianOracles[0])
 }
 
-async function getPolicy(address: string, chainID: number): Promise<Policy> {
-    const dt = await initializeClient(chainID)
+async function getPolicy(
+    address: string,
+    client: queries.Client,
+): Promise<Policy> {
+    const dt = await client
         .query(GET_POLICY_DATA, { id: address.toLowerCase() })
         .toPromise()
     return new Policy(dt.data.policies[0])
 }
 
-async function getToken(address: string, chainID: number): Promise<Token> {
-    const dt = await initializeClient(chainID)
+async function getToken(
+    address: string,
+    client: queries.Client,
+): Promise<Token> {
+    const dt = await client
         .query(GET_TOKEN_DATA, { id: address.toLowerCase() })
         .toPromise()
     return new Token(dt.data.tokens[0])
@@ -57,16 +70,19 @@ async function getToken(address: string, chainID: number): Promise<Token> {
 
 async function getXCController(
     address: string,
-    chainID: number,
+    client: queries.Client,
 ): Promise<XCController> {
-    const dt = await initializeClient(chainID)
+    const dt = await client
         .query(GET_XC_CONTROLLER_DATA, { id: address.toLowerCase() })
         .toPromise()
     return new XCController(dt.data.xccontrollers[0])
 }
 
-async function getXCToken(address: string, chainID: number): Promise<XCToken> {
-    const dt = await initializeClient(chainID)
+async function getXCToken(
+    address: string,
+    client: queries.Client,
+): Promise<XCToken> {
+    const dt = await client
         .query(GET_XC_TOKEN_DATA, { id: address.toLowerCase() })
         .toPromise()
     return new XCToken(dt.data.xctokens[0])
@@ -76,20 +92,22 @@ async function getXCToken(address: string, chainID: number): Promise<XCToken> {
 // skip can't be more than 5000.
 // TODO: Alternatively Query using timestamp ranges
 async function getOracleProviderReports(
-    oracle: Oracle,
-    providerID: string,
-    chainID: number,
+    oracleAddress: string,
+    providerAddress: string,
+    client: queries.Client,
 ): Promise<Report[]> {
     let skip = 0
     const reports: Report[] = []
     while (true) {
         try {
-            const dt = await initializeClient(chainID)
+            const dt = await client
                 .query(GET_PROVIDER_REPORTS, {
-                    providerID: providerID,
-                    oracleID: oracle.address,
+                    providerID: oracleAddress
+                        .toLowerCase()
+                        .concat('|')
+                        .concat(providerAddress.toLowerCase()),
                     first: MAX_PER_PAGE,
-                    skip: skip,
+                    skip,
                 })
                 .toPromise()
             if (!dt.data || dt.data.oracleReports.length == 0) {
@@ -106,14 +124,17 @@ async function getOracleProviderReports(
     return reports
 }
 
-async function getRebases(policy: Policy, chainID: number): Promise<Rebase[]> {
+async function getRebases(
+    policy: Policy,
+    client: queries.Client,
+): Promise<Rebase[]> {
     let skip = 0
     const rebases: Rebase[] = []
     while (true) {
         try {
-            const dt = await initializeClient(chainID)
+            const dt = await client
                 .query(GET_REBASES, {
-                    id: policy.address,
+                    id: policy.address.toLowerCase(),
                     first: MAX_PER_PAGE,
                     skip: skip,
                 })
@@ -134,13 +155,13 @@ async function getRebases(policy: Policy, chainID: number): Promise<Rebase[]> {
 
 async function getXCRebases(
     controller: XCController,
-    chainID: number,
+    client: queries.Client,
 ): Promise<XCRebase[]> {
     let skip = 0
     const rebases: XCRebase[] = []
     while (true) {
         try {
-            const dt = await initializeClient(chainID)
+            const dt = await client
                 .query(GET_XC_REBASES, {
                     id: controller.address,
                     first: MAX_PER_PAGE,
@@ -164,11 +185,11 @@ async function getXCRebases(
 async function getBCTokenBalances(
     token: Token,
     addresses: string[],
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenBalance[]> {
-    const dt = await initializeClient(chainID)
+    const dt = await client
         .query(GET_TOKEN_BALANCES, {
-            id: token.address,
+            id: token.address.toLowerCase(),
             accounts: addresses.map((a) => a.toLowerCase()),
         })
         .toPromise()
@@ -182,11 +203,11 @@ async function getBCTokenBalances(
 async function getBCTokenBalance(
     token: Token,
     address: string,
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenBalance> {
-    const dt = await initializeClient(chainID)
+    const dt = await client
         .query(GET_TOKEN_BALANCES, {
-            id: token.address,
+            id: token.address.toLowerCase(),
             accounts: [address.toLowerCase()],
         })
         .toPromise()
@@ -197,11 +218,11 @@ async function getBCTokenApproval(
     token: Token,
     owner: string,
     spender: string,
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenApproval> {
-    const dt = await initializeClient(chainID)
+    const dt = await client
         .query(GET_TOKEN_APPROVAL, {
-            id: token.address,
+            id: token.address.toLowerCase(),
             owner: owner.toLowerCase(),
             spender: spender.toLowerCase(),
         })
@@ -212,11 +233,11 @@ async function getBCTokenApproval(
 async function getXCTokenBalances(
     xctoken: XCToken,
     addresses: string[],
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenBalance[]> {
-    const dt = await initializeClient(chainID)
+    const dt = await client
         .query(GET_XC_TOKEN_BALANCES, {
-            id: xctoken.address,
+            id: xctoken.address.toLowerCase(),
             accounts: addresses.map((a) => a.toLowerCase()),
         })
         .toPromise()
@@ -230,11 +251,11 @@ async function getXCTokenBalances(
 async function getXCTokenBalance(
     xctoken: XCToken,
     address: string,
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenBalance> {
-    const dt = await initializeClient(chainID)
+    const dt = await client
         .query(GET_XC_TOKEN_BALANCES, {
-            id: xctoken.address,
+            id: xctoken.address.toLowerCase(),
             accounts: [address.toLowerCase()],
         })
         .toPromise()
@@ -245,11 +266,11 @@ async function getXCTokenApproval(
     xctoken: XCToken,
     owner: string,
     spender: string,
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenApproval> {
-    const dt = await initializeClient(chainID)
+    const dt = await client
         .query(GET_XC_TOKEN_APPROVAL, {
-            id: xctoken.address,
+            id: xctoken.address.toLowerCase(),
             owner: owner.toLowerCase(),
             spender: spender.toLowerCase(),
         })
@@ -260,66 +281,96 @@ async function getXCTokenApproval(
 async function getTokenBalances(
     token: Token | XCToken,
     addresses: string[],
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenBalance[]> {
     if (token instanceof XCToken) {
-        return getXCTokenBalances(token as XCToken, addresses, chainID)
+        return getXCTokenBalances(token as XCToken, addresses, client)
     }
-    return getBCTokenBalances(token as Token, addresses, chainID)
+    return getBCTokenBalances(token as Token, addresses, client)
 }
 
 async function getTokenBalance(
     token: Token | XCToken,
     address: string,
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenBalance> {
     if (token instanceof XCToken) {
-        return getXCTokenBalance(token as XCToken, address, chainID)
+        return getXCTokenBalance(token as XCToken, address, client)
     }
-    return getBCTokenBalance(token as Token, address, chainID)
+    return getBCTokenBalance(token as Token, address, client)
 }
 
 async function getTokenApproval(
     token: Token | XCToken,
     owner: string,
     spender: string,
-    chainID: number,
+    client: queries.Client,
 ): Promise<TokenApproval> {
     if (token instanceof XCToken) {
-        return getXCTokenApproval(token as XCToken, owner, spender, chainID)
+        return getXCTokenApproval(token as XCToken, owner, spender, client)
     }
-    return getBCTokenApproval(token as Token, owner, spender, chainID)
+    return getBCTokenApproval(token as Token, owner, spender, client)
 }
 
 // Helper functions
-function getAmpleforthMarketOracle(chainID = 1): Promise<Oracle> {
+function getAmpleforthMarketOracle(
+    chainID = DEFAULT_CHAIN_ID,
+    client: queries.Client = DEFAULT_CLIENT,
+): Promise<Oracle> {
     const addresses = deployments.getDeployment(chainID)
-    return getOracle(addresses.MarketOracle.toLowerCase(), chainID)
+    return getOracle(addresses.MarketOracle.toLowerCase(), client)
 }
 
-function getAmpleforthCPIOracle(chainID = 1): Promise<Oracle> {
+function getAmpleforthCPIOracle(
+    chainID = DEFAULT_CHAIN_ID,
+    client: queries.Client = DEFAULT_CLIENT,
+): Promise<Oracle> {
     const addresses = deployments.getDeployment(chainID)
-    return getOracle(addresses.CPIOracle.toLowerCase(), chainID)
+    return getOracle(addresses.CPIOracle.toLowerCase(), client)
 }
 
-function getAmpleforthPolicy(chainID = 1): Promise<Policy> {
+function getAmpleforthCPIOracles(
+    chainID = DEFAULT_CHAIN_ID,
+    client: queries.Client = DEFAULT_CLIENT,
+): Promise<Oracle[]> {
     const addresses = deployments.getDeployment(chainID)
-    return getPolicy(addresses.Policy.toLowerCase(), chainID)
+    return Promise.all(
+        [addresses.CPIOracle]
+            .concat(addresses.PrevCPIOracles)
+            .map((a) => getOracle(a.toLowerCase(), client)),
+    )
 }
 
-function getAMPLToken(chainID = 1): Promise<Token> {
+function getAmpleforthPolicy(
+    chainID = DEFAULT_CHAIN_ID,
+    client: queries.Client = DEFAULT_CLIENT,
+): Promise<Policy> {
     const addresses = deployments.getDeployment(chainID)
-    return getToken(addresses.Token.toLowerCase(), chainID)
+    return getPolicy(addresses.Policy.toLowerCase(), client)
 }
 
-function getXCAmpleController(chainID: number): Promise<XCController> {
+function getAMPLToken(
+    chainID = DEFAULT_CHAIN_ID,
+    client: queries.Client = DEFAULT_CLIENT,
+): Promise<Token> {
+    const addresses = deployments.getDeployment(chainID)
+    return getToken(addresses.Token.toLowerCase(), client)
+}
+
+function getXCAmpleController(
+    chainID: number,
+    client: queries.Client,
+): Promise<XCController> {
     const addresses = deployments.getXCDeployment(chainID)
-    return getXCController(addresses.XCController.toLowerCase(), chainID)
+    return getXCController(addresses.XCController.toLowerCase(), client)
 }
 
-function getXCAmpleToken(chainID: number): Promise<XCToken> {
+function getXCAmpleToken(
+    chainID: number,
+    client: queries.Client,
+): Promise<XCToken> {
     const addresses = deployments.getXCDeployment(chainID)
-    return getXCToken(addresses.XCToken.toLowerCase(), chainID)
+    return getXCToken(addresses.XCToken.toLowerCase(), client)
 }
 
 export {
@@ -342,6 +393,7 @@ export {
     // Helper functions
     getAmpleforthMarketOracle,
     getAmpleforthCPIOracle,
+    getAmpleforthCPIOracles,
     getAmpleforthPolicy,
     getAMPLToken,
     getXCAmpleController,

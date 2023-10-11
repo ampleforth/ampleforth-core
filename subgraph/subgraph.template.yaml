@@ -3,6 +3,7 @@ description: Subgraph for the Ampleforth protocol contracts on ethereum
 repository: https://github.com/ampleforth/ampleforth-core
 schema:
   file: ./schema.graphql
+
 dataSources:
   - kind: ethereum/contract
     name: CPIOracle
@@ -20,12 +21,34 @@ dataSources:
       entities:
         - MedianOracle
       callHandlers:
-        - function: setReportDelaySec(uint256)
-          handler: handleStorageUpdate
-        - function: setReportExpirationTimeSec(uint256)
-          handler: handleStorageUpdate
-        - function: setMinimumProviders(uint256)
-          handler: handleStorageUpdate
+        - function: purgeReports()
+          handler: handlePurgeReports
+      eventHandlers:
+        - event: ProviderReportPushed(indexed address,uint256,uint256)
+          handler: handleProviderReportPushed
+        - event: ProviderAdded(address)
+          handler: handleAddProvider
+        - event: ProviderRemoved(address)
+          handler: handleRemoveProvider
+      file: ./src/datasources/oracle.ts
+      language: wasm/assemblyscript
+
+  - kind: ethereum/contract
+    name: CPIOracle_0
+    network: "{{ network }}"
+    source:
+      abi: OracleABI
+      address: "{{ prevCpiOracles.0 }}"
+      startBlock: {{ startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      abis:
+        - name: OracleABI
+          file: ../sdk/src/abis/MedianOracle.json
+      entities:
+        - MedianOracle
+      callHandlers:
         - function: purgeReports()
           handler: handlePurgeReports
       eventHandlers:
@@ -54,12 +77,6 @@ dataSources:
       entities:
         - MedianOracle
       callHandlers:
-        - function: setReportDelaySec(uint256)
-          handler: handleStorageUpdate
-        - function: setReportExpirationTimeSec(uint256)
-          handler: handleStorageUpdate
-        - function: setMinimumProviders(uint256)
-          handler: handleStorageUpdate
         - function: purgeReports()
           handler: handlePurgeReports
       eventHandlers:
@@ -87,20 +104,11 @@ dataSources:
           file: ../sdk/src/abis/UFragmentsPolicy.json
       entities:
         - Policy
-      callHandlers:
-        - function: setDeviationThreshold(uint256)
-          handler: handleStorageUpdate
-        - function: setRebaseTimingParameters(uint256,uint256,uint256)
-          handler: handleStorageUpdate
-        - function: setRebaseFunctionLowerPercentage(int256)
-          handler: handleStorageUpdate
-        - function: setRebaseFunctionUpperPercentage(int256)
-          handler: handleStorageUpdate
-        - function: setRebaseFunctionGrowth(int256)
-          handler: handleStorageUpdate
       eventHandlers:
         - event: LogRebase(indexed uint256,uint256,uint256,int256,uint256)
-          handler: handleRebase
+          handler: handleLogRebase
+        - event: LogRebaseV2(indexed uint256,uint256,uint256,int256)
+          handler: handleLogRebaseV2
       file: ./src/datasources/policy.ts
       language: wasm/assemblyscript
 
@@ -119,9 +127,6 @@ dataSources:
           file: ../sdk/src/abis/UFragments.json
       entities:
         - Token
-      callHandlers:
-        - function: setMonetaryPolicy(address)
-          handler: handleStorageUpdate
       eventHandlers:
         - event: LogRebase(indexed uint256,uint256)
           handler: handleRebase

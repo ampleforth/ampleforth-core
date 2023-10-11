@@ -35,18 +35,20 @@ export function handlePurgeReports(call: PurgeReportsCall): void {
   let provider = fetchOracleProvider(oracle, call.from)
 
   if (provider.report1 != null) {
-    let report1 = fetchOracleReport(provider, provider.report1!)
+    let report1 = fetchOracleReport(provider, provider.report1)
     report1.timestamp = constants.BIGINT_ONE
     report1.purged = true
     report1.save()
   }
 
   if (provider.report2 != null) {
-    let report2 = fetchOracleReport(provider, provider.report2!)
+    let report2 = fetchOracleReport(provider, provider.report2)
     report2.timestamp = constants.BIGINT_ONE
     report2.purged = true
     report2.save()
   }
+
+  oracle.save()
 }
 
 // Triggered when on "ProviderReportPushed" event
@@ -63,8 +65,8 @@ export function handleProviderReportPushed(event: ProviderReportPushed): void {
   report.timestamp = event.params.timestamp
   report.nonce = currentNonce
 
-  let report1 = fetchOracleReport(provider, provider.report1!)
-  let report2 = fetchOracleReport(provider, provider.report2!)
+  let report1 = fetchOracleReport(provider, provider.report1)
+  let report2 = fetchOracleReport(provider, provider.report2)
   if (report1.timestamp.le(report2.timestamp)) {
     provider.report1 = report.id
   } else {
