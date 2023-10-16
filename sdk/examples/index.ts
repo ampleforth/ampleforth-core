@@ -54,7 +54,9 @@ async function printAMPLData(chainID: number, client: queries.Client) {
     if (cpi && rate) {
         console.log(
             'Next rebase perc',
-            policy.nextRebasePerc(rate.toString(), cpi.toString()).toString(),
+            policy
+                .nextRebasePerc(rate.toString(), policy.targetRate.toString())
+                .toString(),
         )
     }
 

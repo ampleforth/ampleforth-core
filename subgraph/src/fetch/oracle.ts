@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { constants } from '@amxx/graphprotocol-utils'
 import { OracleABI } from '../../generated/MarketOracle/OracleABI'
 import {
@@ -6,6 +6,7 @@ import {
   OracleProvider,
   OracleReport,
 } from '../../generated/schema'
+import { formatEther } from '../utils'
 
 export function refreshMedianOracle(oracle: MedianOracle): void {
   let oracleAddress = Address.fromString(oracle.id)
@@ -14,6 +15,10 @@ export function refreshMedianOracle(oracle: MedianOracle): void {
   oracle.reportDelaySec = oracleContract.reportDelaySec()
   oracle.reportExpirationTimeSec = oracleContract.reportExpirationTimeSec()
   oracle.minimumProviders = oracleContract.minimumProviders()
+  let scalar = oracleContract.try_scalar()
+  if (!scalar.reverted) {
+    oracle.scalar = formatEther(scalar.value)
+  }
 }
 
 export function fetchMedianOracle(id: Address): MedianOracle {
@@ -22,6 +27,7 @@ export function fetchMedianOracle(id: Address): MedianOracle {
   if (oracle == null) {
     oracle = new MedianOracle(oracleId)
     oracle.address = id
+    oracle.scalar = BigDecimal.fromString('1')
     refreshMedianOracle(oracle as MedianOracle)
   }
   return oracle as MedianOracle

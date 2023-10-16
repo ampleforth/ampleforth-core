@@ -6,6 +6,7 @@ type MedianOracle @entity {
   minimumProviders: BigInt!
   providers: [OracleProvider!]! @derivedFrom(field: "oracle")
   historicalReports: [OracleReport!]! @derivedFrom(field: "oracle")
+  scalar: BigDecimal!
 }
 
 type OracleProvider @entity {
@@ -33,7 +34,6 @@ type Policy @entity {
   id: ID!
   token: Token! @derivedFrom(field: "policy")
   address: Bytes!
-  baseCPI: BigDecimal!
   rebaseFunctionLowerPercentage: BigDecimal
   rebaseFunctionUpperPercentage: BigDecimal
   rebaseFunctionGrowth: BigDecimal
@@ -57,7 +57,6 @@ type Rebase @entity {
   supplyAdjustment: BigDecimal!
   targetRate: BigDecimal!
   marketRate: BigDecimal!
-  cpi: BigDecimal!
 }
 
 type TokenBalance @entity {

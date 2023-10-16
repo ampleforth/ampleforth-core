@@ -4,7 +4,6 @@ import Rebase, { RebaseData } from './Rebase'
 export interface PolicyData {
     id: string
     address: string
-    baseCPI: string
     rebaseFunctionLowerPercentage: string
     rebaseFunctionUpperPercentage: string
     rebaseFunctionGrowth: string
@@ -42,6 +41,10 @@ export default class Policy {
         return this.lastRebase.supply
     }
 
+    get targetRate(): BigNumber {
+        return this.lastRebase.targetRate
+    }
+
     get rebaseFunctionLowerPercentage(): BigNumber {
         return new BigNumber(this.data.rebaseFunctionLowerPercentage)
     }
@@ -52,11 +55,6 @@ export default class Policy {
 
     get rebaseFunctionGrowth(): BigNumber {
         return new BigNumber(this.data.rebaseFunctionGrowth)
-    }
-
-    // TODO: remove this
-    get baseCPI(): BigNumber {
-        return new BigNumber(this.data.baseCPI)
     }
 
     get rebaseLag(): BigNumber {
@@ -93,14 +91,15 @@ export default class Policy {
         return [nextRebaseWindowStart, nextRebaseWindowEnd]
     }
 
-    nextRebaseSupply(marketRate: string, cpi: string): BigNumber {
-        const supplyDelta = this.computeSupplyDelta(marketRate, cpi)
+    nextRebaseSupply(marketRate: string, targetRate: string): BigNumber {
+        const supplyDelta = this.computeSupplyDelta(marketRate, targetRate)
         return this.supply.plus(supplyDelta)
     }
 
-    nextRebasePerc(marketRate: string, cpi: string): BigNumber {
-        const targetRate = new BigNumber(cpi).div(this.baseCPI)
-        const deviation = new BigNumber(marketRate).minus(targetRate)
+    nextRebasePerc(marketRate: string, targetRate: string): BigNumber {
+        const deviation = new BigNumber(marketRate).minus(
+            new BigNumber(targetRate),
+        )
 
         if (deviation.abs().lte(this.deviationThreshold)) {
             return new BigNumber('0')
@@ -112,7 +111,7 @@ export default class Policy {
         const scaling = new BigNumber('32')
 
         const delta = new BigNumber(marketRate)
-            .div(targetRate)
+            .div(new BigNumber(targetRate))
             .minus(new BigNumber('1'))
 
         let exp = growth.multipliedBy(delta)
@@ -136,8 +135,8 @@ export default class Policy {
         return lower.plus(numerator.div(denominator))
     }
 
-    computeSupplyDelta(marketRate: string, cpi: string): BigNumber {
-        const nextRebasePercentage = this.nextRebasePerc(marketRate, cpi)
+    computeSupplyDelta(marketRate: string, targetRate: string): BigNumber {
+        const nextRebasePercentage = this.nextRebasePerc(marketRate, targetRate)
         return this.supply.multipliedBy(nextRebasePercentage)
     }
 

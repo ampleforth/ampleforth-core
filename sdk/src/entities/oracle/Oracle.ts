@@ -8,6 +8,7 @@ export interface OracleData {
     reportDelaySec: number
     reportExpirationTimeSec: number
     minimumProviders: number
+    scalar: number
     providers: ProviderData[]
 }
 
@@ -36,6 +37,10 @@ export default class Oracle {
         return new BigNumber(this.data.minimumProviders).toNumber()
     }
 
+    get scalar(): BigNumber {
+        return new BigNumber(this.data.scalar)
+    }
+
     get providers(): Provider[] {
         return this._providers
     }
@@ -52,7 +57,7 @@ export default class Oracle {
     getData(): BigNumber {
         const now = Math.trunc(Date.now() / 1000)
         const r = this.medianReportAt(now)
-        return r == null ? new BigNumber(0) : (r as BigNumber)
+        return r == null ? new BigNumber(0) : (r.div(this.scalar) as BigNumber)
     }
 
     medianReportAt(timestamp: number): BigNumber | null {

@@ -12,7 +12,6 @@ const REBASE_FRAGMENT = `
     supplyAdjustment
     targetRate
     marketRate
-    cpi
   }
 `
 
@@ -20,7 +19,6 @@ export const GET_POLICY_DATA = `
   query GetPolicyData ($id: ID!) {
     policies(where: { id: $id }) {
       id
-      baseCPI
       rebaseFunctionLowerPercentage
       rebaseFunctionUpperPercentage
       rebaseFunctionGrowth

@@ -21,6 +21,7 @@ export const GET_ORACLE_DATA = `
       reportDelaySec
       reportExpirationTimeSec
       minimumProviders
+      scalar
       providers {
         id
         address

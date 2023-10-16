@@ -4,14 +4,12 @@ import { PolicyABI } from '../../generated/Policy/PolicyABI'
 import { Policy, Rebase } from '../../generated/schema'
 import { formatEther } from '../utils'
 
-let BASE_CPI = BigDecimal.fromString('109.195000000000007392')
 let INITIAL_SUPPLY = BigDecimal.fromString('50000000')
 let INITIAL_RATE = constants.BIGDECIMAL_ONE
 
 export function refreshPolicy(policy: Policy): void {
   let policyAddress = Address.fromString(policy.id)
   let policyContract = PolicyABI.bind(policyAddress)
-  policy.baseCPI = BASE_CPI
   let lower = policyContract.try_rebaseFunctionLowerPercentage()
   if (lower.reverted) {
     log.info('rebaseFunctionLowerPercentage reverted', [])
@@ -49,7 +47,6 @@ export function fetchPolicy(id: Address): Policy {
     rebase.previousSupply = INITIAL_SUPPLY
     rebase.targetRate = INITIAL_RATE
     rebase.marketRate = INITIAL_RATE
-    rebase.cpi = BASE_CPI
     rebase.save()
     policy.lastRebase = rebase.id
   }
@@ -69,7 +66,6 @@ export function fetchRebase(policy: Policy, rebaseId: string): Rebase {
     rebase.supplyAdjustment = constants.BIGDECIMAL_ZERO
     rebase.targetRate = constants.BIGDECIMAL_ZERO
     rebase.marketRate = constants.BIGDECIMAL_ZERO
-    rebase.cpi = constants.BIGDECIMAL_ZERO
   }
   return rebase as Rebase
 }

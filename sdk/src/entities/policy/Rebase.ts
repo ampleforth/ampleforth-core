@@ -9,7 +9,6 @@ export interface RebaseData {
     precentageChange: string
     supplyAdjustment: string
     marketRate: string
-    cpi: string
     targetRate: string
 }
 
@@ -45,6 +44,10 @@ export default class Rebase {
     }
 
     get priceTarget(): BigNumber {
+        return new BigNumber(this.data.targetRate)
+    }
+
+    get targetRate(): BigNumber {
         return new BigNumber(this.data.targetRate)
     }
 
