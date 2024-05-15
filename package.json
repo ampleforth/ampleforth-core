@@ -8,14 +8,9 @@
     "workspaces",
     "yarn"
   ],
-  "scripts": {
-    "sdk": "yarn workspace @ampleforthorg/sdk",
-    "subgraph": "yarn workspace @ampleforthorg/subgraph"
-  },
-  "private": true,
-  "workspaces": {
-    "packages": [
-      "*"
-    ]
-  }
+  "packageManager": "yarn@3.2.1",
+  "workspaces": [
+    "sdk",
+    "subgraph"
+  ]
 }

@@ -21,7 +21,6 @@ docker-compose up
 
 Setup project:
 ```
-yarn global add mustache
 yarn
 ```
 
@@ -32,9 +31,9 @@ To build and deploy the subgraph to the graph hosted service:
 ./scripts/deploy.sh mainnet ampleforth/staging
 
 # testnet deployment
-./scripts/deploy.sh goerli ampleforth/ampleforth-core-goerli
+./scripts/deploy.sh goerli ampleforth-core-goerli
 
 # production deployment
-./scripts/deploy.sh mainnet ampleforth/ampleforth-core
-./scripts/deploy.sh avalanche ampleforth/ampleforth-core-avalanche
+./scripts/deploy.sh mainnet ampleforth-core
+./scripts/deploy.sh avalanche ampleforth-core-avalanche
 ```

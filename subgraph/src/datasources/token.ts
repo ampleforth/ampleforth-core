@@ -40,7 +40,7 @@ export function handleTransfer(event: Transfer): void {
   let scaledRecepientBalance = fetchTokenBalance(token, event.params.to)
   let scaledAmountExact = token.balanceScalar.times(event.params.value)
 
-  if (event.params.from.toHexString() != constants.ADDRESS_ZERO) {
+  if (event.params.from != constants.ADDRESS_ZERO) {
     scaledSenderBalance.valueExact =
       scaledSenderBalance.valueExact.minus(scaledAmountExact)
     scaledSenderBalance.value = formatAMPL(scaledSenderBalance.valueExact)
