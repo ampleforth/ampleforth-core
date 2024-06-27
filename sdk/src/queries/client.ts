@@ -10,7 +10,7 @@ type GraphEndpointsMapping = {
 }
 export const GRAPH_ENDPOINTS: GraphEndpointsMapping = {
     // chainID => endpoint
-    1: `${GRAPH_BASE_URL}/ampleforth/staging`,
+    1: `https://web-api.ampleforth.org/graph-cache/ampleforth-core`,
     5: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core-goerli`,
     43114: `${GRAPH_BASE_URL}/ampleforth/ampleforth-core-avalanche`,
 }
