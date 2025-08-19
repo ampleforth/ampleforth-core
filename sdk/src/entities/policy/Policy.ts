@@ -4,9 +4,10 @@ import Rebase, { RebaseData } from './Rebase'
 export interface PolicyData {
     id: string
     address: string
-    rebaseFunctionLowerPercentage: string
-    rebaseFunctionUpperPercentage: string
-    rebaseFunctionGrowth: string
+    rebaseFunctionPositivePercentageLimit: string
+    rebaseFunctionPositiveGrowth: string
+    rebaseFunctionNegativePercentageLimit: string
+    rebaseFunctionNegativeGrowth: string
     rebaseLag: string
     deviationThreshold: string
     minRebaseTimeIntervalSec: string
@@ -105,14 +106,34 @@ export default class Policy {
             return new BigNumber('0')
         }
 
-        const upper = new BigNumber(this.rebaseFunctionUpperPercentage)
-        const lower = new BigNumber(this.rebaseFunctionLowerPercentage)
-        const growth = new BigNumber(this.rebaseFunctionGrowth)
+        // Commented out the original lines
+        // const positiveUpper = new BigNumber(this.rebaseFunctionPositivePercentageLimit)
+        // const positiveLower = new BigNumber(this.rebaseFunctionPositivePercentageLimit).negated()
+        // const positiveGrowth = new BigNumber(this.rebaseFunctionPositiveGrowth)
+
+        // const negativeUpper = new BigNumber(this.rebaseFunctionNegativePercentageLimit)
+        // const negativeLower = new BigNumber(this.rebaseFunctionNegativePercentageLimit).negated()
+        // const negativeGrowth = new BigNumber(this.rebaseFunctionNegativeGrowth)
+
+        // Hardcoded values
+        const positiveUpper = new BigNumber('0.05').multipliedBy(1e18)
+        const positiveLower = new BigNumber('-0.05').multipliedBy(1e18)
+        const positiveGrowth = new BigNumber('20').multipliedBy(1e18)
+
+        const negativeUpper = new BigNumber('-0.077').multipliedBy(1e18)
+        const negativeLower = new BigNumber('0.077').multipliedBy(1e18)
+        const negativeGrowth = new BigNumber('41').multipliedBy(1e18)
+
         const scaling = new BigNumber('32')
 
         const delta = new BigNumber(marketRate)
             .div(new BigNumber(targetRate))
             .minus(new BigNumber('1'))
+
+        const isPositive = delta.gte(0)
+        const upper = isPositive ? positiveUpper : negativeUpper
+        const lower = isPositive ? positiveLower : negativeLower
+        const growth = isPositive ? positiveGrowth : negativeGrowth
 
         let exp = growth.multipliedBy(delta)
         exp = BigNumber.minimum(new BigNumber('100'), exp)
@@ -123,6 +144,7 @@ export default class Policy {
                   .dp(0, BigNumber.ROUND_FLOOR)
                   .div(scaling)
             : exp.multipliedBy(scaling).dp(0, BigNumber.ROUND_CEIL).div(scaling)
+
         const pow = new BigNumber(2 ** exp.toNumber())
         if (pow.isEqualTo(new BigNumber('0'))) {
             return new BigNumber('0')
