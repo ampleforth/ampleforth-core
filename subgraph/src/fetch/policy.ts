@@ -10,24 +10,35 @@ let INITIAL_RATE = constants.BIGDECIMAL_ONE
 export function refreshPolicy(policy: Policy): void {
   let policyAddress = Address.fromString(policy.id)
   let policyContract = PolicyABI.bind(policyAddress)
-  let lower = policyContract.try_rebaseFunctionLowerPercentage()
-  if (lower.reverted) {
-    log.info('rebaseFunctionLowerPercentage reverted', [])
+
+  let positiveLimit = policyContract.try_rebaseFunctionPositivePercentageLimit()
+  if (positiveLimit.reverted) {
+    log.info('rebaseFunctionPositivePercentageLimit reverted', [])
   } else {
-    policy.rebaseFunctionLowerPercentage = formatEther(lower.value)
+    policy.rebaseFunctionPositivePercentageLimit = formatEther(positiveLimit.value)
   }
-  let upper = policyContract.try_rebaseFunctionUpperPercentage()
-  if (upper.reverted) {
-    log.info('rebaseFunctionUpperPercentage reverted', [])
+
+  let positiveGrowth = policyContract.try_rebaseFunctionPositiveGrowth()
+  if (positiveGrowth.reverted) {
+    log.info('rebaseFunctionPositiveGrowth reverted', [])
   } else {
-    policy.rebaseFunctionUpperPercentage = formatEther(upper.value)
+    policy.rebaseFunctionPositiveGrowth = formatEther(positiveGrowth.value)
   }
-  let growth = policyContract.try_rebaseFunctionGrowth()
-  if (growth.reverted) {
-    log.info('rebaseFunctionGrowth reverted', [])
+
+  let negativeLimit = policyContract.try_rebaseFunctionNegativePercentageLimit()
+  if (negativeLimit.reverted) {
+    log.info('rebaseFunctionNegativePercentageLimit reverted', [])
   } else {
-    policy.rebaseFunctionGrowth = formatEther(growth.value)
+    policy.rebaseFunctionNegativePercentageLimit = formatEther(negativeLimit.value)
   }
+
+  let negativeGrowth = policyContract.try_rebaseFunctionNegativeGrowth()
+  if (negativeGrowth.reverted) {
+    log.info('rebaseFunctionNegativeGrowth reverted', [])
+  } else {
+    policy.rebaseFunctionNegativeGrowth = formatEther(negativeGrowth.value)
+  }
+
   policy.rebaseLag = policyContract.rebaseLag()
   policy.deviationThreshold = formatEther(policyContract.deviationThreshold())
   policy.minRebaseTimeIntervalSec = policyContract.minRebaseTimeIntervalSec()
