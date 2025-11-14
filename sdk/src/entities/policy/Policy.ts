@@ -4,9 +4,10 @@ import Rebase, { RebaseData } from './Rebase'
 export interface PolicyData {
     id: string
     address: string
-    rebaseFunctionLowerPercentage: string
-    rebaseFunctionUpperPercentage: string
-    rebaseFunctionGrowth: string
+    rebaseFunctionNegativePercentageLimit: string
+    rebaseFunctionPositivePercentageLimit: string
+    rebaseFunctionNegativeGrowth: string
+    rebaseFunctionPositiveGrowth: string
     rebaseLag: string
     deviationThreshold: string
     minRebaseTimeIntervalSec: string
@@ -14,6 +15,13 @@ export interface PolicyData {
     rebaseWindowLengthSec: string
     lastRebase: RebaseData
     historicalRebases: RebaseData[]
+}
+
+const DATA_DEFAULTS = {
+    rebaseFunctionNegativePercentageLimit: '-0.077',
+    rebaseFunctionPositivePercentageLimit: '0.05',
+    rebaseFunctionNegativeGrowth: '41',
+    rebaseFunctionPositiveGrowth: '20',
 }
 
 export default class Policy {
@@ -45,16 +53,32 @@ export default class Policy {
         return this.lastRebase.targetRate
     }
 
-    get rebaseFunctionLowerPercentage(): BigNumber {
-        return new BigNumber(this.data.rebaseFunctionLowerPercentage)
+    get rebaseFunctionNegativePercentageLimit(): BigNumber {
+        return new BigNumber(
+            this.data.rebaseFunctionNegativePercentageLimit ||
+                DATA_DEFAULTS.rebaseFunctionNegativePercentageLimit,
+        )
     }
 
-    get rebaseFunctionUpperPercentage(): BigNumber {
-        return new BigNumber(this.data.rebaseFunctionUpperPercentage)
+    get rebaseFunctionPositivePercentageLimit(): BigNumber {
+        return new BigNumber(
+            this.data.rebaseFunctionPositivePercentageLimit ||
+                DATA_DEFAULTS.rebaseFunctionPositivePercentageLimit,
+        )
     }
 
-    get rebaseFunctionGrowth(): BigNumber {
-        return new BigNumber(this.data.rebaseFunctionGrowth)
+    get rebaseFunctionNegativeGrowth(): BigNumber {
+        return new BigNumber(
+            this.data.rebaseFunctionNegativeGrowth ||
+                DATA_DEFAULTS.rebaseFunctionNegativeGrowth,
+        )
+    }
+
+    get rebaseFunctionPositiveGrowth(): BigNumber {
+        return new BigNumber(
+            this.data.rebaseFunctionPositiveGrowth ||
+                DATA_DEFAULTS.rebaseFunctionPositiveGrowth,
+        )
     }
 
     get rebaseLag(): BigNumber {
@@ -105,14 +129,25 @@ export default class Policy {
             return new BigNumber('0')
         }
 
-        const upper = new BigNumber(this.rebaseFunctionUpperPercentage)
-        const lower = new BigNumber(this.rebaseFunctionLowerPercentage)
-        const growth = new BigNumber(this.rebaseFunctionGrowth)
-        const scaling = new BigNumber('32')
-
         const delta = new BigNumber(marketRate)
             .div(new BigNumber(targetRate))
             .minus(new BigNumber('1'))
+
+        const isPositiveRebase = delta.gte(0)
+        const lower = isPositiveRebase
+            ? new BigNumber(
+                  this.rebaseFunctionPositivePercentageLimit,
+              ).negated()
+            : new BigNumber(this.rebaseFunctionNegativePercentageLimit)
+        const upper = isPositiveRebase
+            ? new BigNumber(this.rebaseFunctionPositivePercentageLimit)
+            : new BigNumber(
+                  this.rebaseFunctionNegativePercentageLimit,
+              ).negated()
+        const growth = isPositiveRebase
+            ? new BigNumber(this.rebaseFunctionPositiveGrowth)
+            : new BigNumber(this.rebaseFunctionNegativeGrowth)
+        const scaling = new BigNumber('32')
 
         let exp = growth.multipliedBy(delta)
         exp = BigNumber.minimum(new BigNumber('100'), exp)

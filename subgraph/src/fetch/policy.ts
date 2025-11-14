@@ -10,23 +10,29 @@ let INITIAL_RATE = constants.BIGDECIMAL_ONE
 export function refreshPolicy(policy: Policy): void {
   let policyAddress = Address.fromString(policy.id)
   let policyContract = PolicyABI.bind(policyAddress)
-  let lower = policyContract.try_rebaseFunctionLowerPercentage()
+  let lower = policyContract.try_rebaseFunctionNegativePercentageLimit()
   if (lower.reverted) {
-    log.info('rebaseFunctionLowerPercentage reverted', [])
+    log.info('rebaseFunctionNegativePercentageLimit reverted', [])
   } else {
-    policy.rebaseFunctionLowerPercentage = formatEther(lower.value)
+    policy.rebaseFunctionNegativePercentageLimit = formatEther(lower.value)
   }
-  let upper = policyContract.try_rebaseFunctionUpperPercentage()
+  let upper = policyContract.try_rebaseFunctionPositivePercentageLimit()
   if (upper.reverted) {
-    log.info('rebaseFunctionUpperPercentage reverted', [])
+    log.info('rebaseFunctionPositivePercentageLimit reverted', [])
   } else {
-    policy.rebaseFunctionUpperPercentage = formatEther(upper.value)
+    policy.rebaseFunctionPositivePercentageLimit = formatEther(upper.value)
   }
-  let growth = policyContract.try_rebaseFunctionGrowth()
-  if (growth.reverted) {
-    log.info('rebaseFunctionGrowth reverted', [])
+  let growthLower = policyContract.try_rebaseFunctionNegativeGrowth()
+  if (growthLower.reverted) {
+    log.info('rebaseFunctionNegativeGrowth reverted', [])
   } else {
-    policy.rebaseFunctionGrowth = formatEther(growth.value)
+    policy.rebaseFunctionNegativeGrowth = formatEther(growthLower.value)
+  }
+  let growthUpper = policyContract.try_rebaseFunctionPositiveGrowth()
+  if (growthUpper.reverted) {
+    log.info('rebaseFunctionPositiveGrowth reverted', [])
+  } else {
+    policy.rebaseFunctionPositiveGrowth = formatEther(growthUpper.value)
   }
   policy.rebaseLag = policyContract.rebaseLag()
   policy.deviationThreshold = formatEther(policyContract.deviationThreshold())

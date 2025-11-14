@@ -19,9 +19,10 @@ export const GET_POLICY_DATA = `
   query GetPolicyData ($id: ID!) {
     policies(where: { id: $id }) {
       id
-      rebaseFunctionLowerPercentage
-      rebaseFunctionUpperPercentage
-      rebaseFunctionGrowth
+      rebaseFunctionNegativePercentageLimit
+      rebaseFunctionPositivePercentageLimit
+      rebaseFunctionNegativeGrowth
+      rebaseFunctionPositiveGrowth
       rebaseLag
       deviationThreshold
       minRebaseTimeIntervalSec

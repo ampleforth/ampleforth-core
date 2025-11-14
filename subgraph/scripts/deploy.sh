@@ -11,3 +11,4 @@ yarn graph deploy $2 \
   --node https://subgraphs.alchemy.com/api/subgraphs/deploy \
   --deploy-key $GRAPH_AUTH \
   --ipfs https://ipfs.satsuma.xyz
+  

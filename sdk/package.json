@@ -1,6 +1,6 @@
 {
     "name": "@ampleforthorg/sdk",
-    "version": "1.0.33",
+    "version": "1.0.34",
     "description": "Typescript SDK for the Ampleforth Protocol",
     "license": "GPL-3.0-or-later",
     "main": "dist/src/index.js",
@@ -12,8 +12,8 @@
     "scripts": {
         "clean": "rimraf coverage build tmp",
         "prebuild": "yarn lint:fix",
-        "build": "tsc -p tsconfig.json",
-        "build:watch": "tsc -w -p tsconfig.json",
+        "build": "tsc -p tsconfig.json --skipLibCheck",
+        "build:watch": "tsc -w -p tsconfig.json --skipLibCheck",
         "lint": "yarn eslint && yarn prettier:list-different",
         "lint:fix": "yarn eslint:fix && yarn prettier",
         "eslint": "eslint . --ext .ts,.tsx",
