@@ -4,7 +4,7 @@ The Graph is a tool for for indexing events emitted on the Ethereum blockchain. 
 
 ```
 Public graphql endpoint:
-https://api.thegraph.com/subgraphs/name/aalavandhan/ampleforth
+https://api.goldsky.com/api/public/project_cmgzjl03n004g5np20v5j3qpx/subgraphs/ampleforth-core/prod/gn
 ```
 
 ## Getting started
@@ -34,6 +34,9 @@ To build and deploy the subgraph to the graph hosted service:
 ./scripts/deploy.sh goerli ampleforth-core-goerli
 
 # production deployment
-./scripts/deploy.sh mainnet ampleforth-core
-./scripts/deploy.sh avalanche ampleforth-core-avalanche
+./scripts/deploy.sh mainnet ampleforth-core <VERSION>
+./scripts/deploy.sh avalanche ampleforth-core-avalanche <VERSION>
+# once deployed, update the tag that frg-web-api looks for.
+goldsky subgraph tag create ampleforth-core/<VERSION> --tag prod
+```
 ```
